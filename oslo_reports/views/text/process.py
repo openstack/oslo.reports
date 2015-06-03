@@ -18,14 +18,14 @@ This module provides a view for
 visualizing processes in human-readable formm
 """
 
-import openstack.common.report.views.jinja_view as jv
+import oslo_reports.views.jinja_view as jv
 
 
 class ProcessView(jv.JinjaView):
     """A Process View
 
     This view displays process models defined by
-    :class:`openstack.common.report.models.process.ProcessModel`
+    :class:`oslo_reports.models.process.ProcessModel`
     """
 
     VIEW_TEXT = (

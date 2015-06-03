@@ -18,8 +18,8 @@ This module defines a class representing a process,
 potentially with subprocesses.
 """
 
-import openstack.common.report.models.with_default_views as mwdv
-import openstack.common.report.views.text.process as text_views
+import oslo_reports.models.with_default_views as mwdv
+import oslo_reports.views.text.process as text_views
 
 
 class ProcessModel(mwdv.ModelWithDefaultViews):

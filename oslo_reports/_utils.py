@@ -12,10 +12,13 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-"""Provides Data Model Generators
+"""Various utilities for report generation
 
-This module defines classes for generating data models
-( :class:`openstack.common.report.models.base.ReportModel` ).
-A generator is any object which is callable with no parameters
-and returns a data model.
+This module includes various utilities
+used in generating reports.
 """
+
+class StringWithAttrs(str):
+    """A String that can have arbitrary attributes"""
+
+    pass

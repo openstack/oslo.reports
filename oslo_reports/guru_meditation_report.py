@@ -58,11 +58,11 @@ import sys
 
 from oslo_utils import timeutils
 
-from openstack.common.report.generators import conf as cgen
-from openstack.common.report.generators import process as prgen
-from openstack.common.report.generators import threading as tgen
-from openstack.common.report.generators import version as pgen
-from openstack.common.report import report
+from oslo_reports.generators import conf as cgen
+from oslo_reports.generators import process as prgen
+from oslo_reports.generators import threading as tgen
+from oslo_reports.generators import version as pgen
+from oslo_reports import report
 
 
 class GuruMeditation(object):

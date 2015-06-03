@@ -19,14 +19,14 @@ visualizing threads, green threads, and stack traces
 in human-readable form.
 """
 
-from openstack.common.report.views import jinja_view as jv
+from oslo_reports.views import jinja_view as jv
 
 
 class StackTraceView(jv.JinjaView):
     """A Stack Trace View
 
     This view displays stack trace models defined by
-    :class:`openstack.common.report.models.threading.StackTraceModel`
+    :class:`oslo_reports.models.threading.StackTraceModel`
     """
 
     VIEW_TEXT = (
@@ -52,7 +52,7 @@ class GreenThreadView(object):
     """A Green Thread View
 
     This view displays a green thread provided by the data
-    model :class:`openstack.common.report.models.threading.GreenThreadModel`
+    model :class:`oslo_reports.models.threading.GreenThreadModel`
     """
 
     FORMAT_STR = "------{thread_str: ^60}------" + "\n" + "{stack_trace}"
@@ -68,7 +68,7 @@ class ThreadView(object):
     """A Thread Collection View
 
     This view displays a python thread provided by the data
-    model :class:`openstack.common.report.models.threading.ThreadModel`  # noqa
+    model :class:`oslo_reports.models.threading.ThreadModel`  # noqa
     """
 
     FORMAT_STR = "------{thread_str: ^60}------" + "\n" + "{stack_trace}"

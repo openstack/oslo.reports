@@ -27,8 +27,8 @@ import mock
 from oslotest import base
 import six
 
-from openstack.common.report import guru_meditation_report as gmr
-from openstack.common.report.models import with_default_views as mwdv
+from oslo_reports import guru_meditation_report as gmr
+from oslo_reports.models import with_default_views as mwdv
 
 
 class FakeVersionObj(object):

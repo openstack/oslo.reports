@@ -20,10 +20,10 @@ import mock
 from oslo_config import cfg
 from oslotest import base
 
-from openstack.common.report.generators import conf as os_cgen
-from openstack.common.report.generators import threading as os_tgen
-from openstack.common.report.generators import version as os_pgen
-from openstack.common.report.models import threading as os_tmod
+from oslo_reports.generators import conf as os_cgen
+from oslo_reports.generators import threading as os_tgen
+from oslo_reports.generators import version as os_pgen
+from oslo_reports.models import threading as os_tmod
 
 
 class TestOpenstackGenerators(base.BaseTestCase):
@@ -49,7 +49,7 @@ class TestOpenstackGenerators(base.BaseTestCase):
             def __init__(self, thread_id, tb):
                 self.traceback = tb
 
-        with mock.patch('openstack.common.report.models'
+        with mock.patch('oslo_reports.models'
                         '.threading.ThreadModel', FakeModel):
             model = os_tgen.ThreadReportGenerator("fake traceback")()
             curr_thread = model.get(threading.current_thread().ident, None)

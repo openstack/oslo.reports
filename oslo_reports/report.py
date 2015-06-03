@@ -19,7 +19,7 @@ All reports take the form of a report class containing various report
 sections.
 """
 
-from openstack.common.report.views.text import header as header_views
+from oslo_reports.views.text import header as header_views
 
 
 class BasicReport(object):
@@ -45,7 +45,7 @@ class BasicReport(object):
         list.  The view is called on the model which results from
         the generator when the report is run.  A generator is simply
         a method or callable object which takes no arguments and
-        returns a :class:`openstack.common.report.models.base.ReportModel`
+        returns a :class:`oslo_reports.models.base.ReportModel`
         or similar object.
 
         :param view: the top-level view for the section
@@ -110,11 +110,11 @@ class ReportOfType(BasicReport):
 
     .. seealso::
 
-       Class :class:`openstack.common.report.models.with_default_view.ModelWithDefaultView` # noqa
+       Class :class:`oslo_reports.models.with_default_view.ModelWithDefaultView` # noqa
           (the entire class)
 
-       Class :class:`openstack.common.report.models.base.ReportModel`
-           :func:`openstack.common.report.models.base.ReportModel.set_current_view_type` # noqa
+       Class :class:`oslo_reports.models.base.ReportModel`
+           :func:`oslo_reports.models.base.ReportModel.set_current_view_type` # noqa
 
     :param str tp: the type of the report
     """
@@ -167,13 +167,13 @@ class TextReport(ReportOfType):
         list.  The view is called on the model which results from
         the generator when the report is run.  A generator is simply
         a method or callable object which takes no arguments and
-        returns a :class:`openstack.common.report.models.base.ReportModel`
+        returns a :class:`oslo_reports.models.base.ReportModel`
         or similar object.
 
         The model is told to serialize as text (if possible) at serialization
         time by wrapping the generator.  The view model's attached view
         (if any) is wrapped in a
-        :class:`openstack.common.report.views.text.header.TitledView`
+        :class:`oslo_reports.views.text.header.TitledView`
 
         :param str heading: the title for the section
         :param generator: the method or class which generates the model

@@ -16,19 +16,19 @@
 
 This module defines a class for configuration
 generators for generating the model in
-:mod:`openstack.common.report.models.conf`.
+:mod:`oslo_reports.models.conf`.
 """
 
 from oslo_config import cfg
 
-from openstack.common.report.models import conf as cm
+from oslo_reports.models import conf as cm
 
 
 class ConfigReportGenerator(object):
     """A Configuration Data Generator
 
     This generator returns
-    :class:`openstack.common.report.models.conf.ConfigModel`,
+    :class:`oslo_reports.models.conf.ConfigModel`,
     by default using the configuration options stored
     in :attr:`oslo_config.cfg.CONF`, which is where
     OpenStack stores everything.

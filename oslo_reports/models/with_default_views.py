@@ -14,10 +14,10 @@
 
 import copy
 
-from openstack.common.report.models import base as base_model
-from openstack.common.report.views.json import generic as jsonviews
-from openstack.common.report.views.text import generic as textviews
-from openstack.common.report.views.xml import generic as xmlviews
+from oslo_reports.models import base as base_model
+from oslo_reports.views.json import generic as jsonviews
+from oslo_reports.views.text import generic as textviews
+from oslo_reports.views.xml import generic as xmlviews
 
 
 class ModelWithDefaultViews(base_model.ReportModel):
@@ -35,11 +35,11 @@ class ModelWithDefaultViews(base_model.ReportModel):
     The default 'default views' are
 
     text
-        :class:`openstack.common.report.views.text.generic.KeyValueView`
+        :class:`oslo_reports.views.text.generic.KeyValueView`
     xml
-        :class:`openstack.common.report.views.xml.generic.KeyValueView`
+        :class:`oslo_reports.views.xml.generic.KeyValueView`
     json
-        :class:`openstack.common.report.views.json.generic.KeyValueView`
+        :class:`oslo_reports.views.json.generic.KeyValueView`
 
     .. function:: to_type()
 

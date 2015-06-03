@@ -17,7 +17,7 @@
 This modules defines several basic views for serializing
 data to JSON.  Submodels that have already been serialized
 as JSON may have their string values marked with `__is_json__
-= True` using :class:`openstack.common.report.utils.StringWithAttrs`
+= True` using :class:`oslo_reports._utils.StringWithAttrs`
 (each of the classes within this module does this automatically,
 and non-naive serializers check for this attribute and handle
 such strings specially)
@@ -27,7 +27,7 @@ import copy
 
 from oslo_serialization import jsonutils as json
 
-from openstack.common.report import utils as utils
+from oslo_reports import _utils as utils
 
 
 class BasicKeyValueView(object):

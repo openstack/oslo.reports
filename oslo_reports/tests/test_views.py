@@ -17,12 +17,12 @@ import copy
 import mock
 from oslotest import base
 
-from openstack.common.report.models import base as base_model
-from openstack.common.report.models import with_default_views as mwdv
-from openstack.common.report import report
-from openstack.common.report.views import jinja_view as jv
-from openstack.common.report.views.json import generic as json_generic
-from openstack.common.report.views.text import generic as text_generic
+from oslo_reports.models import base as base_model
+from oslo_reports.models import with_default_views as mwdv
+from oslo_reports import report
+from oslo_reports.views import jinja_view as jv
+from oslo_reports.views.json import generic as json_generic
+from oslo_reports.views.text import generic as text_generic
 
 
 def mwdv_generator():

@@ -17,17 +17,17 @@
 This module defines a class for OpenStack
 version and package information
 generators for generating the model in
-:mod:`openstack.common.report.models.version`.
+:mod:`oslo_reports.models.version`.
 """
 
-from openstack.common.report.models import version as vm
+from oslo_reports.models import version as vm
 
 
 class PackageReportGenerator(object):
     """A Package Information Data Generator
 
     This generator returns
-    :class:`openstack.common.report.models.version.PackageModel`,
+    :class:`oslo_reports.models.version.PackageModel`,
     extracting data from the given version object, which should follow
     the general format defined in Nova's version information (i.e. it
     should contain the methods vendor_string, product_string, and

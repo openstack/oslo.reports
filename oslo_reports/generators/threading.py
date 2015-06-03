@@ -16,27 +16,43 @@
 
 This module defines classes for threading-related
 generators for generating the models in
-:mod:`openstack.common.report.models.threading`.
+:mod:`oslo_reports.models.threading`.
 """
 
 from __future__ import absolute_import
 
+import gc
 import sys
 import threading
 
-import greenlet
+from oslo_reports.models import threading as tm
+from oslo_reports.models import with_default_views as mwdv
+from oslo_reports.views.text import generic as text_views
 
-from openstack.common.report.models import threading as tm
-from openstack.common.report.models import with_default_views as mwdv
-from openstack.common.report import utils as rutils
-from openstack.common.report.views.text import generic as text_views
+
+def _find_objects(t):
+    """Find Objects in the GC State
+
+    This horribly hackish method locates objects of a
+    given class in the current python instance's garbage
+    collection state.  In case you couldn't tell, this is
+    horribly hackish, but is necessary for locating all
+    green threads, since they don't keep track of themselves
+    like normal threads do in python.
+
+    :param class t: the class of object to locate
+    :rtype: list
+    :returns: a list of objects of the given type
+    """
+
+    return [o for o in gc.get_objects() if isinstance(o, t)]
 
 
 class ThreadReportGenerator(object):
     """A Thread Data Generator
 
     This generator returns a collection of
-    :class:`openstack.common.report.models.threading.ThreadModel`
+    :class:`oslo_reports.models.threading.ThreadModel`
     objects by introspecting the current python state using
     :func:`sys._current_frames()` .  Its constructor may optionally
     be passed a frame object.  This frame object will be interpreted
@@ -67,19 +83,21 @@ class GreenThreadReportGenerator(object):
     """A Green Thread Data Generator
 
     This generator returns a collection of
-    :class:`openstack.common.report.models.threading.GreenThreadModel`
+    :class:`oslo_reports.models.threading.GreenThreadModel`
     objects by introspecting the current python garbage collection
     state, and sifting through for :class:`greenlet.greenlet` objects.
 
     .. seealso::
 
-        Function :func:`openstack.common.report.utils._find_objects`
+        Function :func:`_find_objects`
     """
 
     def __call__(self):
+        import greenlet
+
         threadModels = [
             tm.GreenThreadModel(gr.gr_frame)
-            for gr in rutils._find_objects(greenlet.greenlet)
+            for gr in _find_objects(greenlet.greenlet)
         ]
 
         return mwdv.ModelWithDefaultViews(threadModels,
