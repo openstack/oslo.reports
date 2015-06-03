@@ -18,7 +18,10 @@ This module includes various utilities
 used in generating reports.
 """
 
-class StringWithAttrs(str):
+import six
+
+
+class StringWithAttrs(six.text_type):
     """A String that can have arbitrary attributes"""
 
     pass

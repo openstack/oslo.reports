@@ -17,6 +17,8 @@
 This package defines several text views with headers
 """
 
+import six
+
 
 class HeaderView(object):
     """A Text View With a Header
@@ -31,7 +33,7 @@ class HeaderView(object):
         self.header = header
 
     def __call__(self, model):
-        return str(self.header) + "\n" + str(model)
+        return six.text_type(self.header) + "\n" + six.text_type(model)
 
 
 class TitledView(HeaderView):

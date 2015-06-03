@@ -67,7 +67,7 @@ class ReportModel(col.MutableMapping):
         self_cpy = copy.deepcopy(self)
         for key in self_cpy:
             if getattr(self_cpy[key], 'attached_view', None) is not None:
-                self_cpy[key] = str(self_cpy[key])
+                self_cpy[key] = six.text_type(self_cpy[key])
 
         if self.attached_view is not None:
             return self.attached_view(self_cpy)

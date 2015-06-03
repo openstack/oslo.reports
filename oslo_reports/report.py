@@ -19,6 +19,8 @@ All reports take the form of a report class containing various report
 sections.
 """
 
+import six
+
 from oslo_reports.views.text import header as header_views
 
 
@@ -72,15 +74,15 @@ class BasicReport(object):
         :returns: the serialized report
         """
 
-        return "\n".join(str(sect) for sect in self.sections)
+        return "\n".join(six.text_type(sect) for sect in self.sections)
 
 
 class ReportSection(object):
     """A Report Section
 
     A report section contains a generator and a top-level view. When something
-    attempts to serialize the section by calling str() on it, the section runs
-    the generator and calls the view on the resulting model.
+    attempts to serialize the section by calling str() or unicode() on it, the
+    section runs the generator and calls the view on the resulting model.
 
     .. seealso::
 

@@ -75,7 +75,7 @@ class KeyValueView(object):
             elif ET.iselement(rootmodel):
                 res.append(rootmodel)
             else:
-                res.text = str(rootmodel)
+                res.text = six.text_type(rootmodel)
 
             return res
 

@@ -35,7 +35,7 @@ class MultiView(object):
     """
 
     def __call__(self, model):
-        res = [str(model[key]) for key in model]
+        res = [six.text_type(model[key]) for key in model]
         return "\n".join(res)
 
 
@@ -132,7 +132,7 @@ class KeyValueView(object):
                 for val in sorted(root, key=str):
                     res.extend(serialize(val, None, indent + 1))
             else:
-                str_root = str(root)
+                str_root = six.text_type(root)
                 if '\n' in str_root:
                     # we are in a submodel
                     if rootkey is not None:
@@ -175,7 +175,7 @@ class TableView(object):
         self.column_width = (72 - len(column_names) + 1) // len(column_names)
 
         column_headers = "|".join(
-            "{ch[" + str(n) + "]: ^" + str(self.column_width) + "}"
+            "{{ch[{n}]: ^{width}}}".format(n=n, width=self.column_width)
             for n in range(len(column_names))
         )
 
@@ -188,14 +188,15 @@ class TableView(object):
         self.header_fmt_str = column_headers + "\n" + vert_divider + "\n"
 
         self.row_fmt_str = "|".join(
-            "{cv[" + str(n) + "]: ^" + str(self.column_width) + "}"
+            "{{cv[{n}]: ^{width}}}".format(n=n, width=self.column_width)
             for n in range(len(column_values))
         )
 
     def __call__(self, model):
         res = self.header_fmt_str.format(ch=self.column_names)
         for raw_row in model[self.table_prop_name]:
-            row = [str(raw_row[prop_name]) for prop_name in self.column_values]
+            row = [six.text_type(raw_row[prop_name])
+                   for prop_name in self.column_values]
             # double format is in case we have roundoff error
             res += '{0: <72}\n'.format(self.row_fmt_str.format(cv=row))
 

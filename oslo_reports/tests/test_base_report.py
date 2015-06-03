@@ -16,6 +16,7 @@ import collections as col
 import re
 
 from oslotest import base
+import six
 
 from oslo_reports.models import base as base_model
 from oslo_reports import report
@@ -25,7 +26,7 @@ class BasicView(object):
     def __call__(self, model):
         res = ""
         for k in sorted(model.keys()):
-            res += str(k) + ": " + str(model[k]) + ";"
+            res += six.text_type(k) + ": " + six.text_type(model[k]) + ";"
         return res
 
 
@@ -66,7 +67,7 @@ class TestBaseModel(base.BaseTestCase):
     def test_submodel_attached_view(self):
         class TmpView(object):
             def __call__(self, model):
-                return '{len: ' + str(len(model.c)) + '}'
+                return '{len: ' + six.text_type(len(model.c)) + '}'
 
         def generate_model_with_submodel():
             base_m = basic_generator()
@@ -84,10 +85,10 @@ class TestBaseModel(base.BaseTestCase):
         # ugly code for python 2.6 compat, since python 2.6
         # does not have assertRaisesRegexp
         try:
-            str(model)
+            six.text_type(model)
         except Exception as e:
             err_str = 'Cannot stringify model: no attached view'
-            self.assertEqual(str(e), err_str)
+            self.assertEqual(six.text_type(e), err_str)
         else:
             self.assertTrue(False)
 
@@ -95,7 +96,7 @@ class TestBaseModel(base.BaseTestCase):
         model = base_model.ReportModel(data={'a': 1, 'b': 2},
                                        attached_view=BasicView())
 
-        self.assertEqual(str(model), 'a: 1;b: 2;')
+        self.assertEqual(six.text_type(model), 'a: 1;b: 2;')
 
     def test_model_repr(self):
         model1 = base_model.ReportModel(data={'a': 1, 'b': 2},
@@ -122,7 +123,7 @@ class TestBaseModel(base.BaseTestCase):
         model.attached_view = BasicView()
 
         # if we don't handle lists properly, we'll get a TypeError here
-        self.assertEqual('0: a;1: b;', str(model))
+        self.assertEqual('0: a;1: b;', six.text_type(model))
 
     def test_immutable_mappings_produce_mutable_models(self):
         class SomeImmutableMapping(col.Mapping):
@@ -142,9 +143,9 @@ class TestBaseModel(base.BaseTestCase):
         model = base_model.ReportModel(data=mp)
         model.attached_view = BasicView()
 
-        self.assertEqual('a: 2;b: 4;c: 8;', str(model))
+        self.assertEqual('a: 2;b: 4;c: 8;', six.text_type(model))
 
         model['d'] = 16
 
-        self.assertEqual('a: 2;b: 4;c: 8;d: 16;', str(model))
+        self.assertEqual('a: 2;b: 4;c: 8;d: 16;', six.text_type(model))
         self.assertEqual({'a': 2, 'b': 4, 'c': 8}, mp.data)
