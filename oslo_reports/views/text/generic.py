@@ -35,7 +35,7 @@ class MultiView(object):
     """
 
     def __call__(self, model):
-        res = [six.text_type(model[key]) for key in model]
+        res = sorted([six.text_type(model[key]) for key in model])
         return "\n".join(res)
 
 
@@ -49,7 +49,7 @@ class BasicKeyValueView(object):
 
     def __call__(self, model):
         res = ""
-        for key in model:
+        for key in sorted(model):
             res += "{key} = {value}\n".format(key=key, value=model[key])
 
         return res

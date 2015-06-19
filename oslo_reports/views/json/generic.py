@@ -38,7 +38,7 @@ class BasicKeyValueView(object):
     """
 
     def __call__(self, model):
-        res = utils.StringWithAttrs(json.dumps(model.data))
+        res = utils.StringWithAttrs(json.dumps(model.data, sort_keys=True))
         res.__is_json__ = True
         return res
 
