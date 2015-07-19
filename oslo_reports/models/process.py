@@ -18,8 +18,12 @@ This module defines a class representing a process,
 potentially with subprocesses.
 """
 
+import psutil
+
 import oslo_reports.models.with_default_views as mwdv
 import oslo_reports.views.text.process as text_views
+
+PS1 = psutil.version_info[0] == 1
 
 
 class ProcessModel(mwdv.ModelWithDefaultViews):
@@ -36,27 +40,34 @@ class ProcessModel(mwdv.ModelWithDefaultViews):
             text_view=text_views.ProcessView())
 
         self['pid'] = process.pid
-        self['parent_pid'] = process.ppid
+        self['parent_pid'] = (process.ppid if PS1 else process.ppid())
         if hasattr(process, 'uids'):
-            self['uids'] = {'real': process.uids.real,
-                            'effective': process.uids.effective,
-                            'saved': process.uids.saved}
+            self['uids'] = {
+                'real': (process.uids.real if PS1 else process.uids().real),
+                'effective': (process.uids.effective if PS1
+                              else process.uids().effective),
+                'saved': (process.uids.saved if PS1 else process.uids().saved)
+            }
         else:
             self['uids'] = {'real': None,
                             'effective': None,
                             'saved': None}
 
         if hasattr(process, 'gids'):
-            self['gids'] = {'real': process.gids.real,
-                            'effective': process.gids.effective,
-                            'saved': process.gids.saved}
+            self['gids'] = {
+                'real': (process.gids.real if PS1 else process.gids().real),
+                'effective': (process.gids.effective if PS1
+                              else process.gids().effective),
+                'saved': (process.gids.saved if PS1 else process.gids().saved)
+            }
         else:
             self['gids'] = {'real': None,
                             'effective': None,
                             'saved': None}
 
-        self['username'] = process.username
-        self['command'] = process.cmdline
-        self['state'] = process.status
+        self['username'] = process.username if PS1 else process.username()
+        self['command'] = process.cmdline if PS1 else process.cmdline()
+        self['state'] = process.status if PS1 else process.status()
 
-        self['children'] = [ProcessModel(pr) for pr in process.get_children()]
+        children = process.get_children() if PS1 else process.children()
+        self['children'] = [ProcessModel(pr) for pr in children]
