@@ -23,16 +23,24 @@ For example, in a nova command module (under nova/cmd):
 .. code-block:: python
    :emphasize-lines: 8,9,10
 
+   from oslo_config import cfg
+   from oslo_log import log as oslo_logging
+   from oslo_reports import opts as gmr_opts
+   from oslo_reports import guru_meditation_report as gmr
+
    CONF = cfg.CONF
    # maybe import some options here...
 
    def main():
-       config.parse_args(sys.argv)
-       logging.setup('blah')
+       oslo_logging.register_options(CONF)
+       gmr_opts.set_defaults(CONF)
 
-       TextGuruMeditation.register_section('Some Special Section',
+       CONF(sys.argv[1:], default_config_files=['myapp.conf'])
+       oslo_logging.setup(CONF, 'myapp')
+
+       gmr.TextGuruMeditation.register_section('Some Special Section',
                                            special_section_generator)
-       TextGuruMeditation.setup_autorun(version_object)
+       gmr.TextGuruMeditation.setup_autorun(version_object, conf=CONF)
 
        server = service.Service.create(binary='some-service',
                                        topic=CONF.some_service_topic)
@@ -106,7 +114,7 @@ class GuruMeditation(object):
 
     @classmethod
     def setup_autorun(cls, version, service_name=None,
-                      log_dir=None, signum=None):
+                      log_dir=None, signum=None, conf=None):
         """Set Up Auto-Run
 
         This method sets up the Guru Meditation Report to automatically
@@ -117,6 +125,7 @@ class GuruMeditation(object):
         :param service_name: this program name used to construct logfile name
         :param logdir: path to a log directory where to create a file
         :param signum: the signal to associate with running the report
+        :param conf: Configuration object, managed by the caller.
         """
 
         if not signum and hasattr(signal, 'SIGUSR1'):
@@ -124,6 +133,8 @@ class GuruMeditation(object):
             signum = signal.SIGUSR1
 
         if signum:
+            if log_dir is None and conf is not None:
+                log_dir = conf.oslo_reports.log_dir
             signal.signal(signum,
                           lambda sn, tb: cls.handle_signal(
                               version, service_name, log_dir, tb))
