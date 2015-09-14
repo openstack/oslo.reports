@@ -165,7 +165,7 @@ class TestGuruMeditationReport(base.BaseTestCase):
         self.old_stderr = sys.stderr
         sys.stderr = six.StringIO()
 
-        os.kill(os.getpid(), signal.SIGUSR1)
+        os.kill(os.getpid(), signal.SIGUSR2)
         self.assertIn('Guru Meditation', sys.stderr.getvalue())
 
     @mock.patch('oslo_utils.timeutils.utcnow',
@@ -175,7 +175,7 @@ class TestGuruMeditationReport(base.BaseTestCase):
         gmr.TextGuruMeditation.setup_autorun(
             FakeVersionObj(), "fake-service", log_dir)
 
-        os.kill(os.getpid(), signal.SIGUSR1)
+        os.kill(os.getpid(), signal.SIGUSR2)
         with open(os.path.join(
                 log_dir, "fake-service_gurumeditation_20140101120000")) as df:
             self.assertIn('Guru Meditation', df.read())
