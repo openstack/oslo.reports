@@ -51,7 +51,7 @@ Then, you can do
 
 .. code-block:: bash
 
-   $ kill -USR1 $SERVICE_PID
+   $ kill -USR2 $SERVICE_PID
 
 and get a Guru Meditation Report in the file or terminal
 where stderr is logged for that given service.
@@ -128,9 +128,9 @@ class GuruMeditation(object):
         :param conf: Configuration object, managed by the caller.
         """
 
-        if not signum and hasattr(signal, 'SIGUSR1'):
-            # SIGUSR1 is not supported on all platforms
-            signum = signal.SIGUSR1
+        if not signum and hasattr(signal, 'SIGUSR2'):
+            # SIGUSR2 is not supported on all platforms
+            signum = signal.SIGUSR2
 
         if signum:
             if log_dir is None and conf is not None:
