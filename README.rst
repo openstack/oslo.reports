@@ -2,6 +2,14 @@
 oslo.reports
 ===================================
 
+.. image:: https://img.shields.io/pypi/v/oslo.reports.svg
+    :target: https://pypi.python.org/pypi/oslo.reports/
+    :alt: Latest Version
+
+.. image:: https://img.shields.io/pypi/dm/oslo.reports.svg
+    :target: https://pypi.python.org/pypi/oslo.reports/
+    :alt: Downloads
+
 When things go wrong in (production) deployments of OpenStack collecting debug
 data is a key first step in the process of triaging & ultimately resolving the
 problem. Projects like Nova has extensively used logging capabilities which
