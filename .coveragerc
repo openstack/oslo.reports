@@ -1,7 +1,8 @@
 [run]
 branch = True
-source = reports
-omit = reports/tests/*,reports/openstack/*
+source = oslo_reports
+omit = oslo_reports/tests/*,oslo_reports/openstack/*
 
 [report]
-ignore-errors = True
+ignore_errors = True
+precision = 2
