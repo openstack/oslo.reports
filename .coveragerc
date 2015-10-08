@@ -1,7 +1,7 @@
 [run]
 branch = True
 source = oslo_reports
-omit = oslo_reports/tests/*,oslo_reports/openstack/*
+omit = oslo_reports/tests/*
 
 [report]
 ignore_errors = True
