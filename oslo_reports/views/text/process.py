@@ -15,7 +15,7 @@
 """Provides process view
 
 This module provides a view for
-visualizing processes in human-readable formm
+visualizing processes in human-readable form
 """
 
 import oslo_reports.views.jinja_view as jv
