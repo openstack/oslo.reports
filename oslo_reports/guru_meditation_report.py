@@ -60,17 +60,21 @@ where stderr is logged for that given service.
 from __future__ import print_function
 
 import inspect
+import logging
 import os
 import signal
 import sys
 
 from oslo_utils import timeutils
 
+from oslo_reports._i18n import _LW
 from oslo_reports.generators import conf as cgen
 from oslo_reports.generators import process as prgen
 from oslo_reports.generators import threading as tgen
 from oslo_reports.generators import version as pgen
 from oslo_reports import report
+
+LOG = logging.getLogger(__name__)
 
 
 class GuruMeditation(object):
@@ -128,16 +132,29 @@ class GuruMeditation(object):
         :param conf: Configuration object, managed by the caller.
         """
 
-        if not signum and hasattr(signal, 'SIGUSR2'):
-            # SIGUSR2 is not supported on all platforms
-            signum = signal.SIGUSR2
+        if log_dir is None and conf is not None:
+            log_dir = conf.oslo_reports.log_dir
 
         if signum:
-            if log_dir is None and conf is not None:
-                log_dir = conf.oslo_reports.log_dir
-            signal.signal(signum,
-                          lambda sn, tb: cls.handle_signal(
-                              version, service_name, log_dir, tb))
+            cls._setup_signal(signum, version, service_name, log_dir)
+            return
+
+        if hasattr(signal, 'SIGUSR1'):
+            # TODO(dims) We need to remove this in the "O" release cycle
+            LOG.warning(_LW("Guru mediation now registers SIGUSR1 and SIGUSR2 "
+                            "by default for backward compatibility. SIGUSR1 "
+                            "will no longer be registered in a future "
+                            "release, so please use SIGUSR2 to "
+                            "generate reports."))
+            cls._setup_signal(signal.SIGUSR1, version, service_name, log_dir)
+        if hasattr(signal, 'SIGUSR2'):
+            cls._setup_signal(signal.SIGUSR2, version, service_name, log_dir)
+
+    @classmethod
+    def _setup_signal(cls, signum, version, service_name, log_dir):
+        signal.signal(signum,
+                      lambda sn, tb: cls.handle_signal(
+                          version, service_name, log_dir, tb))
 
     @classmethod
     def handle_signal(cls, version, service_name, log_dir, traceback):
