@@ -64,6 +64,7 @@ import logging
 import os
 import signal
 import sys
+import traceback
 
 from oslo_utils import timeutils
 
@@ -178,6 +179,7 @@ class GuruMeditation(object):
         try:
             res = cls(version, frame).run()
         except Exception:
+            traceback.print_exc(file=sys.stderr)
             print("Unable to run Guru Meditation Report!",
                   file=sys.stderr)
         else:

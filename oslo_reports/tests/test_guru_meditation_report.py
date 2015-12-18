@@ -180,6 +180,19 @@ class TestGuruMeditationReport(base.BaseTestCase):
                 log_dir, "fake-service_gurumeditation_20140101120000")) as df:
             self.assertIn('Guru Meditation', df.read())
 
+    @mock.patch.object(gmr.TextGuruMeditation, 'run')
+    def test_fail_prints_traceback(self, run_mock):
+        class RunFail(Exception):
+            pass
+
+        run_mock.side_effect = RunFail()
+        gmr.TextGuruMeditation.setup_autorun(FakeVersionObj())
+        self.old_stderr = sys.stderr
+        sys.stderr = six.StringIO()
+
+        os.kill(os.getpid(), signal.SIGUSR2)
+        self.assertIn('RunFail', sys.stderr.getvalue())
+
     def tearDown(self):
         super(TestGuruMeditationReport, self).tearDown()
         if self.old_stderr is not None:
