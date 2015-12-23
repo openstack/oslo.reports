@@ -27,6 +27,16 @@ _option_group = 'oslo_reports'
 _options = [
     cfg.StrOpt('log_dir',
                help=_('Path to a log directory where to create a file')),
+    cfg.StrOpt('file_event_handler',
+               help=_('The path to a file to watch for changes to trigger '
+                      'the reports, instead of signals. Setting this option '
+                      'disables the signal trigger for the reports. If '
+                      'application is running as a WSGI application it is '
+                      'recommended to use this instead of signals.')),
+    cfg.IntOpt('file_event_handler_interval',
+               default=1,
+               help=_('How many seconds to wait between polls when '
+                      'file_event_handler is set'))
 ]
 
 
