@@ -19,6 +19,7 @@ import os
 import re
 import signal
 import sys
+import threading
 
 # needed to get greenthreads
 import fixtures
@@ -27,8 +28,15 @@ import mock
 from oslotest import base
 import six
 
+import oslo_config
+from oslo_config import fixture
 from oslo_reports import guru_meditation_report as gmr
 from oslo_reports.models import with_default_views as mwdv
+from oslo_reports import opts
+
+
+CONF = oslo_config.cfg.CONF
+opts.set_defaults(CONF)
 
 
 class FakeVersionObj(object):
@@ -51,6 +59,24 @@ def skip_body_lines(start_line, report_lines):
     return curr_line
 
 
+class GmrConfigFixture(fixture.Config):
+    def setUp(self):
+        super(GmrConfigFixture, self).setUp()
+
+        self.conf.set_override(
+            'file_event_handler',
+            '/tmp/file',
+            group='oslo_reports')
+        self.conf.set_override(
+            'file_event_handler_interval',
+            10,
+            group='oslo_reports')
+        self.conf.set_override(
+            'log_dir',
+            '/var/fake_log',
+            group='oslo_reports')
+
+
 class TestGuruMeditationReport(base.BaseTestCase):
     def setUp(self):
         super(TestGuruMeditationReport, self).setUp()
@@ -60,6 +86,8 @@ class TestGuruMeditationReport(base.BaseTestCase):
         self.report = gmr.TextGuruMeditation(FakeVersionObj())
 
         self.old_stderr = None
+
+        self.CONF = self.useFixture(GmrConfigFixture(CONF)).conf
 
     def test_basic_report(self):
         report_lines = self.report.run().split('\n')
@@ -167,6 +195,28 @@ class TestGuruMeditationReport(base.BaseTestCase):
 
         os.kill(os.getpid(), signal.SIGUSR2)
         self.assertIn('Guru Meditation', sys.stderr.getvalue())
+
+    @mock.patch.object(gmr.TextGuruMeditation, '_setup_file_watcher')
+    def test_register_autorun_without_signals(self, mock_setup_fh):
+        version = FakeVersionObj()
+        gmr.TextGuruMeditation.setup_autorun(version, conf=self.CONF)
+        mock_setup_fh.assert_called_once_with(
+            '/tmp/file', 10, version, None, '/var/fake_log')
+
+    @mock.patch('os.stat')
+    @mock.patch('time.sleep')
+    @mock.patch.object(threading.Thread, 'start')
+    def test_setup_file_watcher(self, mock_thread, mock_sleep, mock_stat):
+        version = FakeVersionObj()
+        mock_stat.return_value.st_mtime = 3
+
+        gmr.TextGuruMeditation._setup_file_watcher(
+            self.CONF.oslo_reports.file_event_handler,
+            self.CONF.oslo_reports.file_event_handler_interval,
+            version, None, self.CONF.oslo_reports.log_dir)
+
+        mock_stat.assert_called_once_with('/tmp/file')
+        self.assertEqual(1, mock_thread.called)
 
     @mock.patch('oslo_utils.timeutils.utcnow',
                 return_value=datetime.datetime(2014, 1, 1, 12, 0, 0))
