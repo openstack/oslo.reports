@@ -71,8 +71,6 @@ import traceback
 
 from oslo_utils import timeutils
 
-from oslo_reports._i18n import _LE
-from oslo_reports._i18n import _LW
 from oslo_reports.generators import conf as cgen
 from oslo_reports.generators import process as prgen
 from oslo_reports.generators import threading as tgen
@@ -154,11 +152,11 @@ class GuruMeditation(object):
         else:
             if hasattr(signal, 'SIGUSR1'):
                 # TODO(dims) We need to remove this in the "O" release cycle
-                LOG.warning(_LW("Guru meditation now registers SIGUSR1 and "
-                                "SIGUSR2 by default for backward "
-                                "compatibility. SIGUSR1 will no longer be "
-                                "registered in a future release, so please "
-                                "use SIGUSR2 to generate reports."))
+                LOG.warning("Guru meditation now registers SIGUSR1 and "
+                            "SIGUSR2 by default for backward "
+                            "compatibility. SIGUSR1 will no longer be "
+                            "registered in a future release, so please "
+                            "use SIGUSR2 to generate reports.")
                 cls._setup_signal(signal.SIGUSR1,
                                   version, service_name, log_dir)
             if hasattr(signal, 'SIGUSR2'):
@@ -171,8 +169,8 @@ class GuruMeditation(object):
 
         st = os.stat(filepath)
         if not bool(st.st_mode & stat.S_IRGRP):
-            LOG.error(_LE("Guru Meditation Report does not have read "
-                          "permissions to '%s' file."), filepath)
+            LOG.error("Guru Meditation Report does not have read "
+                      "permissions to '%s' file.", filepath)
 
         def _handler():
             mtime = time.time()
