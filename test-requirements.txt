@@ -10,7 +10,7 @@ oslosphinx>=4.7.0 # Apache-2.0
 sphinx!=1.6.1,>=1.5.1 # BSD
 
 # for testing optional parts
-oslo.config>=4.0.0 # Apache-2.0
+oslo.config!=4.3.0,!=4.4.0,>=4.0.0 # Apache-2.0
 eventlet!=0.18.3,!=0.20.1,<0.21.0,>=0.18.2 # MIT
 greenlet>=0.3.2 # MIT
 
