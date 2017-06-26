@@ -47,7 +47,7 @@ doc/build
 # pbr generates these
 AUTHORS
 ChangeLog
-/doc/source/api/
+doc/source/reference/api
 
 # Editors
 *~
