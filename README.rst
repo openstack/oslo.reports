@@ -55,6 +55,6 @@ Each OpenStack project will have the ability to register further generator
 classes to provide custom project specific data.
 
 * Free software: Apache license
-* Documentation: http://docs.openstack.org/developer/oslo.reports
-* Source: http://git.openstack.org/cgit/openstack/oslo.reports
-* Bugs: http://bugs.launchpad.net/oslo.reports
+* Documentation: https://docs.openstack.org/oslo.reports/latest
+* Source: https://git.openstack.org/cgit/openstack/oslo.reports
+* Bugs: https://bugs.launchpad.net/oslo.reports
