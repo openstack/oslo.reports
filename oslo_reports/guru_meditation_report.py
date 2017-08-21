@@ -150,15 +150,6 @@ class GuruMeditation(object):
                 conf.oslo_reports.file_event_handler_interval,
                 version, service_name, log_dir)
         else:
-            if hasattr(signal, 'SIGUSR1'):
-                # TODO(dims) We need to remove this in the "O" release cycle
-                LOG.warning("Guru meditation now registers SIGUSR1 and "
-                            "SIGUSR2 by default for backward "
-                            "compatibility. SIGUSR1 will no longer be "
-                            "registered in a future release, so please "
-                            "use SIGUSR2 to generate reports.")
-                cls._setup_signal(signal.SIGUSR1,
-                                  version, service_name, log_dir)
             if hasattr(signal, 'SIGUSR2'):
                 cls._setup_signal(signal.SIGUSR2,
                                   version, service_name, log_dir)
