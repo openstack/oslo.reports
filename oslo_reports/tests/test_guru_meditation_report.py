@@ -65,7 +65,7 @@ class GmrConfigFixture(fixture.Config):
 
         self.conf.set_override(
             'file_event_handler',
-            '/tmp/file',
+            '/specific/file',
             group='oslo_reports')
         self.conf.set_override(
             'file_event_handler_interval',
@@ -201,7 +201,7 @@ class TestGuruMeditationReport(base.BaseTestCase):
         version = FakeVersionObj()
         gmr.TextGuruMeditation.setup_autorun(version, conf=self.CONF)
         mock_setup_fh.assert_called_once_with(
-            '/tmp/file', 10, version, None, '/var/fake_log')
+            '/specific/file', 10, version, None, '/var/fake_log')
 
     @mock.patch('os.stat')
     @mock.patch('time.sleep')
@@ -215,7 +215,7 @@ class TestGuruMeditationReport(base.BaseTestCase):
             self.CONF.oslo_reports.file_event_handler_interval,
             version, None, self.CONF.oslo_reports.log_dir)
 
-        mock_stat.assert_called_once_with('/tmp/file')
+        mock_stat.assert_called_once_with('/specific/file')
         self.assertEqual(1, mock_thread.called)
 
     @mock.patch('oslo_utils.timeutils.utcnow',
