@@ -28,6 +28,12 @@ To trigger the report to be generated::
 
     kill -SIGUSR2 <process_id>
 
+.. note::
+
+   On SELinux platforms the report process may fail with an AccessDenied
+   exception.  If this happens, temporarily disable SELinux enforcement
+   by running ``sudo setenforce 0``, trigger the report, then turn SELinux
+   back on by running ``sudo setenforce 1``.
 
 Here is a sample report:
 
