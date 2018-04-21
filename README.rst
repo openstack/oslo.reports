@@ -12,11 +12,11 @@ oslo.reports
 ===================================
 
 .. image:: https://img.shields.io/pypi/v/oslo.reports.svg
-    :target: https://pypi.python.org/pypi/oslo.reports/
+    :target: https://pypi.org/project/oslo.reports/
     :alt: Latest Version
 
 .. image:: https://img.shields.io/pypi/dm/oslo.reports.svg
-    :target: https://pypi.python.org/pypi/oslo.reports/
+    :target: https://pypi.org/project/oslo.reports/
     :alt: Downloads
 
 When things go wrong in (production) deployments of OpenStack collecting debug
