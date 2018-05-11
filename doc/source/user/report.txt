@@ -532,7 +532,7 @@ keystone_authtoken:
   auth_port = 35357
   auth_protocol = https
   auth_section = None
-  auth_uri = http://10.0.0.9:5000
+  www_authenticate_uri = http://10.0.0.9:5000
   auth_version = None
   cache = None
   cafile = /opt/stack/data/ca-bundle.pem
