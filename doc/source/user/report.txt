@@ -317,7 +317,6 @@ default:
     nova.api.ec2.cloud:nova.notifications.notify_decorator
     nova.compute.api:nova.notifications.notify_decorator
   multi_host = False
-  multi_instance_display_name_template = %(name)s-%(count)d
   my_block_storage_ip = 10.0.0.9
   my_ip = 10.0.0.9
   network_allocate_retries = 0
