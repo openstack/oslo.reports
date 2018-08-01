@@ -94,6 +94,16 @@ class TestOpenstackGenerators(base.BaseTestCase):
         model = os_cgen.ConfigReportGenerator(conf)()
         model.set_current_view_type('text')
 
+        # oslo.config added a default config_source opt which gets included
+        # in our output, but we also need to support older versions where that
+        # wasn't the case.  This logic can be removed once the oslo.config
+        # lower constraint becomes >=6.4.0.
+        config_source_line = '  config_source = \n'
+        try:
+            conf.config_source
+        except cfg.NoSuchOptError:
+            config_source_line = ''
+
         target_str = ('\ncheese: \n'
                       '  from_cow = True\n'
                       '  group_secrets = ***\n'
@@ -101,8 +111,9 @@ class TestOpenstackGenerators(base.BaseTestCase):
                       '  sharpness = 1\n'
                       '\n'
                       'default: \n'
+                      '%s'
                       '  crackers = triscuit\n'
-                      '  secrets = ***')
+                      '  secrets = ***') % config_source_line
         self.assertEqual(target_str, six.text_type(model))
 
     def test_package_report_generator(self):
