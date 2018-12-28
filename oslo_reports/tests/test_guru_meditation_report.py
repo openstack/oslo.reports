@@ -52,8 +52,8 @@ class FakeVersionObj(object):
 
 def skip_body_lines(start_line, report_lines):
     curr_line = start_line
-    while (len(report_lines[curr_line]) == 0
-           or report_lines[curr_line][0] != '='):
+    while (len(report_lines[curr_line]) == 0 or
+           report_lines[curr_line][0] != '='):
         curr_line += 1
 
     return curr_line
