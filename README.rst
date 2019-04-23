@@ -56,6 +56,6 @@ classes to provide custom project specific data.
 
 * Free software: Apache license
 * Documentation: https://docs.openstack.org/oslo.reports/latest
-* Source: https://git.openstack.org/cgit/openstack/oslo.reports
+* Source: https://opendev.org/openstack/oslo.reports
 * Bugs: https://bugs.launchpad.net/oslo.reports
 * Release notes: https://docs.openstack.org/releasenotes/oslo.reports/
