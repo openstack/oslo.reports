@@ -92,3 +92,4 @@ latex_documents = [
 # -- sphinxcontrib.apidoc configuration --------------------------------------
 apidoc_module_dir = '../../oslo_reports'
 apidoc_output_dir = 'reference/api'
+apidoc_excluded_paths = ['tests']
