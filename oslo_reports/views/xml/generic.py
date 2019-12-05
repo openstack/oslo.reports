@@ -23,9 +23,13 @@ and non-naive serializers check for this attribute and handle
 such strings specially)
 """
 
-import collections as col
 import copy
 import xml.etree.ElementTree as ET
+
+try:  # python 3
+    from collections import abc
+except ImportError:  # python 2
+    import collections as abc
 
 import six
 
@@ -65,10 +69,10 @@ class KeyValueView(object):
         def serialize(rootmodel, rootkeyname):
             res = ET.Element(rootkeyname)
 
-            if isinstance(rootmodel, col.Mapping):
+            if isinstance(rootmodel, abc.Mapping):
                 for key in sorted(rootmodel):
                     res.append(serialize(rootmodel[key], key))
-            elif (isinstance(rootmodel, col.Sequence) and
+            elif (isinstance(rootmodel, abc.Sequence) and
                     not isinstance(rootmodel, six.string_types)):
                 for val in sorted(rootmodel, key=str):
                     res.append(serialize(val, 'item'))

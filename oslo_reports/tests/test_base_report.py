@@ -12,8 +12,12 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-import collections as col
 import re
+
+try:  # python 3
+    from collections import abc
+except ImportError:  # python 2
+    import collections as abc
 
 from oslotest import base
 import six
@@ -119,7 +123,7 @@ class TestBaseModel(base.BaseTestCase):
         self.assertEqual('0: a;1: b;', six.text_type(model))
 
     def test_immutable_mappings_produce_mutable_models(self):
-        class SomeImmutableMapping(col.Mapping):
+        class SomeImmutableMapping(abc.Mapping):
             def __init__(self):
                 self.data = {'a': 2, 'b': 4, 'c': 8}
 

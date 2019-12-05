@@ -18,7 +18,10 @@ This modules provides several generic views for
 serializing models into human-readable text.
 """
 
-import collections as col
+try:  # python 3
+    from collections import abc
+except ImportError:  # python 2
+    import collections as abc
 
 import six
 
@@ -112,7 +115,7 @@ class KeyValueView(object):
             if rootkey is not None:
                 res.append((self.indent_str * indent) + rootkey)
 
-            if isinstance(root, col.Mapping):
+            if isinstance(root, abc.Mapping):
                 if rootkey is None and indent > 0:
                     res.append((self.indent_str * indent) + self.anon_dict)
                 elif rootkey is not None:
@@ -122,7 +125,7 @@ class KeyValueView(object):
 
                 for key in sorted(root):
                     res.extend(serialize(root[key], key, indent + 1))
-            elif (isinstance(root, col.Sequence) and
+            elif (isinstance(root, abc.Sequence) and
                     not isinstance(root, six.string_types)):
                 if rootkey is not None:
                     res[0] += self.list_sep
