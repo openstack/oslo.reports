@@ -147,7 +147,7 @@ class TestGuruMeditationReport(base.BaseTestCase):
         curr_line += len(target_str_p_head)
 
         # followed by at least one process
-        self.assertTrue(re.match("Process \d+ \(under \d+\)",
+        self.assertTrue(re.match(r"Process \d+ \(under \d+\)",
                                  report_lines[curr_line]))
 
         # followed by some more process stuff
