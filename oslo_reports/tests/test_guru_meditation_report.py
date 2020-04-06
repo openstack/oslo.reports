@@ -20,11 +20,11 @@ import re
 import signal
 import sys
 import threading
+from unittest import mock
 
 # needed to get greenthreads
 import fixtures
 import greenlet
-import mock
 from oslotest import base
 import six
 

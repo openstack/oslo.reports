@@ -14,9 +14,9 @@
 #    under the License.
 
 import threading
+from unittest import mock
 
 import greenlet
-import mock
 from oslo_config import cfg
 from oslotest import base
 import six
