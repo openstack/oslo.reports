@@ -15,6 +15,12 @@ Contents
    user/index
    reference/index
 
+Release Notes
+=============
+
+Read also the `oslo.reports Release Notes
+<https://docs.openstack.org/releasenotes/oslo.reports/>`_.
+
 Indices and tables
 ==================
 
