@@ -24,15 +24,14 @@ extensions = [
 ]
 
 # openstackdocstheme options
-repository_name = 'openstack/oslo.reports'
-bug_project = 'oslo.reports'
-bug_tag = ''
+openstackdocs_repo_name = 'openstack/oslo.reports'
+openstackdocs_bug_project = 'oslo.reports'
+openstackdocs_bug_tag = ''
 
 # The master toctree document.
 master_doc = 'index'
 
 # General information about the project.
-project = u'oslo.reports'
 copyright = u'2014, OpenStack Foundation'
 
 # If true, '()' will be appended to :func: etc. cross-reference text.
