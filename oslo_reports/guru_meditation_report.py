@@ -57,8 +57,6 @@ and get a Guru Meditation Report in the file or terminal
 where stderr is logged for that given service.
 """
 
-from __future__ import print_function
-
 import inspect
 import logging
 import os

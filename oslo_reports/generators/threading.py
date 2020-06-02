@@ -19,8 +19,6 @@ generators for generating the models in
 :mod:`oslo_reports.models.threading`.
 """
 
-from __future__ import absolute_import
-
 import gc
 import sys
 import threading
