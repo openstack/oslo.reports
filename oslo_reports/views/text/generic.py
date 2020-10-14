@@ -23,8 +23,6 @@ try:  # python 3
 except ImportError:  # python 2
     import collections as abc
 
-import six
-
 
 class MultiView(object):
     """A Text View Containing Multiple Views
@@ -38,7 +36,7 @@ class MultiView(object):
     """
 
     def __call__(self, model):
-        res = sorted([six.text_type(model[key]) for key in model])
+        res = sorted([str(model[key]) for key in model])
         return "\n".join(res)
 
 
@@ -126,7 +124,7 @@ class KeyValueView(object):
                 for key in sorted(root):
                     res.extend(serialize(root[key], key, indent + 1))
             elif (isinstance(root, abc.Sequence) and
-                    not isinstance(root, six.string_types)):
+                    not isinstance(root, str)):
                 if rootkey is not None:
                     res[0] += self.list_sep
                     if self.before_list is not None:
@@ -135,7 +133,7 @@ class KeyValueView(object):
                 for val in sorted(root, key=str):
                     res.extend(serialize(val, None, indent + 1))
             else:
-                str_root = six.text_type(root)
+                str_root = str(root)
                 if '\n' in str_root:
                     # we are in a submodel
                     if rootkey is not None:
@@ -198,7 +196,7 @@ class TableView(object):
     def __call__(self, model):
         res = self.header_fmt_str.format(ch=self.column_names)
         for raw_row in model[self.table_prop_name]:
-            row = [six.text_type(raw_row[prop_name])
+            row = [str(raw_row[prop_name])
                    for prop_name in self.column_values]
             # double format is in case we have roundoff error
             res += '{0: <72}\n'.format(self.row_fmt_str.format(cv=row))

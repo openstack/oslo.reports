@@ -19,7 +19,6 @@ from unittest import mock
 import greenlet
 from oslo_config import cfg
 from oslotest import base
-import six
 
 from oslo_reports.generators import conf as os_cgen
 from oslo_reports.generators import threading as os_tgen
@@ -43,7 +42,7 @@ class TestOpenstackGenerators(base.BaseTestCase):
         self.assertTrue(was_ok)
 
         model.set_current_view_type('text')
-        self.assertIsNotNone(six.text_type(model))
+        self.assertIsNotNone(str(model))
 
     def test_thread_generator_tb(self):
         class FakeModel(object):
@@ -73,7 +72,7 @@ class TestOpenstackGenerators(base.BaseTestCase):
         self.assertTrue(was_ok)
 
         model.set_current_view_type('text')
-        self.assertIsNotNone(six.text_type(model))
+        self.assertIsNotNone(str(model))
 
     def test_config_model(self):
         conf = cfg.ConfigOpts()
@@ -114,7 +113,7 @@ class TestOpenstackGenerators(base.BaseTestCase):
                       '%s'
                       '  crackers = triscuit\n'
                       '  secrets = ***') % config_source_line
-        self.assertEqual(target_str, six.text_type(model))
+        self.assertEqual(target_str, str(model))
 
     def test_package_report_generator(self):
         class VersionObj(object):
@@ -133,7 +132,7 @@ class TestOpenstackGenerators(base.BaseTestCase):
         target_str = ('product = Sharp Cheddar\n'
                       'vendor = Cheese Shoppe\n'
                       'version = 1.0.0')
-        self.assertEqual(target_str, six.text_type(model))
+        self.assertEqual(target_str, str(model))
 
     def test_package_report_generator_without_vendor_string(self):
         class VersionObj(object):
@@ -149,4 +148,4 @@ class TestOpenstackGenerators(base.BaseTestCase):
         target_str = ('product = Sharp Cheddar\n'
                       'vendor = None\n'
                       'version = 1.0.0')
-        self.assertEqual(target_str, six.text_type(model))
+        self.assertEqual(target_str, str(model))

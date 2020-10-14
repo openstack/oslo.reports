@@ -31,8 +31,6 @@ try:  # python 3
 except ImportError:  # python 2
     import collections as abc
 
-import six
-
 from oslo_reports import _utils as utils
 
 
@@ -73,13 +71,13 @@ class KeyValueView(object):
                 for key in sorted(rootmodel):
                     res.append(serialize(rootmodel[key], key))
             elif (isinstance(rootmodel, abc.Sequence) and
-                    not isinstance(rootmodel, six.string_types)):
+                    not isinstance(rootmodel, str)):
                 for val in sorted(rootmodel, key=str):
                     res.append(serialize(val, 'item'))
             elif ET.iselement(rootmodel):
                 res.append(rootmodel)
             else:
-                res.text = six.text_type(rootmodel)
+                res.text = str(rootmodel)
 
             return res
 

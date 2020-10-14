@@ -13,6 +13,7 @@
 #    under the License.
 
 import datetime
+import io
 import os
 import re
 import signal
@@ -24,7 +25,6 @@ from unittest import mock
 import fixtures
 import greenlet
 from oslotest import base
-import six
 
 import oslo_config
 from oslo_config import fixture
@@ -189,7 +189,7 @@ class TestGuruMeditationReport(base.BaseTestCase):
     def test_register_autorun(self):
         gmr.TextGuruMeditation.setup_autorun(FakeVersionObj())
         self.old_stderr = sys.stderr
-        sys.stderr = six.StringIO()
+        sys.stderr = io.StringIO()
 
         os.kill(os.getpid(), signal.SIGUSR2)
         self.assertIn('Guru Meditation', sys.stderr.getvalue())
@@ -236,7 +236,7 @@ class TestGuruMeditationReport(base.BaseTestCase):
         run_mock.side_effect = RunFail()
         gmr.TextGuruMeditation.setup_autorun(FakeVersionObj())
         self.old_stderr = sys.stderr
-        sys.stderr = six.StringIO()
+        sys.stderr = io.StringIO()
 
         os.kill(os.getpid(), signal.SIGUSR2)
         self.assertIn('RunFail', sys.stderr.getvalue())

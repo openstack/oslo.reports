@@ -28,8 +28,6 @@ try:  # python 3
 except ImportError:  # python 2
     import collections as abc
 
-import six
-
 
 class ReportModel(abc.MutableMapping):
     """A Report Data Model
@@ -71,7 +69,7 @@ class ReportModel(abc.MutableMapping):
         self_cpy = copy.deepcopy(self)
         for key in self_cpy:
             if getattr(self_cpy[key], 'attached_view', None) is not None:
-                self_cpy[key] = six.text_type(self_cpy[key])
+                self_cpy[key] = str(self_cpy[key])
 
         if self.attached_view is not None:
             return self.attached_view(self_cpy)
@@ -147,7 +145,7 @@ class ReportModel(abc.MutableMapping):
 
             # don't die on recursive structures,
             # and don't treat strings like sequences
-            if oid in visited or isinstance(obj, six.string_types):
+            if oid in visited or isinstance(obj, str):
                 return
 
             visited.add(oid)
@@ -160,7 +158,7 @@ class ReportModel(abc.MutableMapping):
                     traverse_obj(item)
 
             elif isinstance(obj, abc.Mapping):
-                for val in six.itervalues(obj):
+                for val in obj.values():
                     traverse_obj(val)
 
         traverse_obj(self)
