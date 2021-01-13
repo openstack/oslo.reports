@@ -31,7 +31,7 @@ class HeaderView(object):
         self.header = header
 
     def __call__(self, model):
-        return str(self.header) + "\n" + str(model)
+        return f'{self.header}\n{model}'
 
 
 class TitledView(HeaderView):
