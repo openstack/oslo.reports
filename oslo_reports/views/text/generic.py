@@ -111,7 +111,7 @@ class KeyValueView(object):
         def serialize(root, rootkey, indent):
             res = []
             if rootkey is not None:
-                res.append((self.indent_str * indent) + rootkey)
+                res.append((self.indent_str * indent) + str(rootkey))
 
             if isinstance(root, abc.Mapping):
                 if rootkey is None and indent > 0:
@@ -121,7 +121,7 @@ class KeyValueView(object):
                     if self.before_dict is not None:
                         res.insert(0, self.before_dict)
 
-                for key in sorted(root):
+                for key in sorted(root, key=str):
                     res.extend(serialize(root[key], key, indent + 1))
             elif (isinstance(root, abc.Sequence) and
                     not isinstance(root, str)):

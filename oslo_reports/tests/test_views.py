@@ -316,6 +316,26 @@ class TestGenericTextViews(base.BaseTestCase):
                       'string = value')
         self.assertEqual(target_str, str(self.model))
 
+    def test_dict_serialization_integer_keys(self):
+        self.model['dt'] = {3: 4, 5: 6}
+
+        target_str = ('dt = \n'
+                      '  3 = 4\n'
+                      '  5 = 6\n'
+                      'int = 1\n'
+                      'string = value')
+        self.assertEqual(target_str, str(self.model))
+
+    def test_dict_serialization_mixed_keys(self):
+        self.model['dt'] = {'3': 4, 5: 6}
+
+        target_str = ('dt = \n'
+                      '  3 = 4\n'
+                      '  5 = 6\n'
+                      'int = 1\n'
+                      'string = value')
+        self.assertEqual(target_str, str(self.model))
+
     def test_list_serialization(self):
         self.model['lt'] = ['a', 'b']
 
