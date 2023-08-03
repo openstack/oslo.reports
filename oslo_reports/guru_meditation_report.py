@@ -120,7 +120,8 @@ class GuruMeditation(object):
 
     @classmethod
     def setup_autorun(cls, version, service_name=None,
-                      log_dir=None, signum=None, conf=None):
+                      log_dir=None, signum=None, conf=None,
+                      setup_signal=True):
         """Set Up Auto-Run
 
         This method sets up the Guru Meditation Report to automatically
@@ -133,13 +134,15 @@ class GuruMeditation(object):
         :param logdir: path to a log directory where to create a file
         :param signum: the signal to associate with running the report
         :param conf: Configuration object, managed by the caller.
+        :param setup_signal: Set up a signal handler
         """
 
         if log_dir is None and conf is not None:
             log_dir = conf.oslo_reports.log_dir
 
         if signum:
-            cls._setup_signal(signum, version, service_name, log_dir)
+            if setup_signal:
+                cls._setup_signal(signum, version, service_name, log_dir)
             return
 
         if conf and conf.oslo_reports.file_event_handler:
@@ -148,7 +151,7 @@ class GuruMeditation(object):
                 conf.oslo_reports.file_event_handler_interval,
                 version, service_name, log_dir)
         else:
-            if hasattr(signal, 'SIGUSR2'):
+            if setup_signal and hasattr(signal, 'SIGUSR2'):
                 cls._setup_signal(signal.SIGUSR2,
                                   version, service_name, log_dir)
 
