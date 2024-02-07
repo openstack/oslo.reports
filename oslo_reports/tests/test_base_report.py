@@ -12,12 +12,8 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+from collections import abc
 import re
-
-try:  # python 3
-    from collections import abc
-except ImportError:  # python 2
-    import collections as abc
 
 from oslotest import base
 
