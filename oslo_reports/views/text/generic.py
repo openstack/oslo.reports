@@ -18,10 +18,7 @@ This modules provides several generic views for
 serializing models into human-readable text.
 """
 
-try:  # python 3
-    from collections import abc
-except ImportError:  # python 2
-    import collections as abc
+from collections import abc
 
 
 class MultiView(object):

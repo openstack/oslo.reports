@@ -23,13 +23,9 @@ and non-naive serializers check for this attribute and handle
 such strings specially)
 """
 
+from collections import abc
 import copy
 import xml.etree.ElementTree as ET
-
-try:  # python 3
-    from collections import abc
-except ImportError:  # python 2
-    import collections as abc
 
 from oslo_reports import _utils as utils
 
