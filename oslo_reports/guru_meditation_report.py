@@ -75,6 +75,11 @@ from oslo_reports.generators import threading as tgen
 from oslo_reports.generators import version as pgen
 from oslo_reports import report
 
+try:
+    import greenlet
+except ImportError:
+    greenlet = None
+
 
 LOG = logging.getLogger(__name__)
 
@@ -240,8 +245,9 @@ class GuruMeditation(object):
         self.add_section('Threads',
                          tgen.ThreadReportGenerator(self.traceback))
 
-        self.add_section('Green Threads',
-                         tgen.GreenThreadReportGenerator())
+        if greenlet:
+            self.add_section('Green Threads',
+                             tgen.GreenThreadReportGenerator())
 
         self.add_section('Processes',
                          prgen.ProcessReportGenerator())
