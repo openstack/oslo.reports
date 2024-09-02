@@ -112,7 +112,8 @@ class TestOpenstackGenerators(base.BaseTestCase):
                       'default: \n'
                       '%s'
                       '  crackers = triscuit\n'
-                      '  secrets = ***') % config_source_line
+                      '  secrets = ***\n'
+                      '  shell_completion = None') % config_source_line
         self.assertEqual(target_str, str(model))
 
     def test_package_report_generator(self):
