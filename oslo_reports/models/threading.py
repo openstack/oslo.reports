@@ -34,7 +34,7 @@ class StackTraceModel(mwdv.ModelWithDefaultViews):
     """
 
     def __init__(self, stack_state):
-        super(StackTraceModel, self).__init__(
+        super().__init__(
             text_view=text_views.StackTraceView())
 
         if (stack_state is not None):
@@ -72,7 +72,7 @@ class ThreadModel(mwdv.ModelWithDefaultViews):
 
     # threadId, stack in sys._current_frams().items()
     def __init__(self, thread_id, stack):
-        super(ThreadModel, self).__init__(text_view=text_views.ThreadView())
+        super().__init__(text_view=text_views.ThreadView())
 
         self['thread_id'] = thread_id
         self['stack_trace'] = StackTraceModel(stack)
@@ -95,6 +95,6 @@ class GreenThreadModel(mwdv.ModelWithDefaultViews):
 
     # gr in greenpool.coroutines_running  --> gr.gr_frame
     def __init__(self, stack):
-        super(GreenThreadModel, self).__init__(
+        super().__init__(
             {'stack_trace': StackTraceModel(stack)},
             text_view=text_views.GreenThreadView())

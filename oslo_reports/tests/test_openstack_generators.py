@@ -45,7 +45,7 @@ class TestOpenstackGenerators(base.BaseTestCase):
         self.assertIsNotNone(str(model))
 
     def test_thread_generator_tb(self):
-        class FakeModel(object):
+        class FakeModel:
             def __init__(self, thread_id, tb):
                 self.traceback = tb
 
@@ -117,7 +117,7 @@ class TestOpenstackGenerators(base.BaseTestCase):
         self.assertEqual(target_str, str(model))
 
     def test_package_report_generator(self):
-        class VersionObj(object):
+        class VersionObj:
             def vendor_string(self):
                 return 'Cheese Shoppe'
 
@@ -136,7 +136,7 @@ class TestOpenstackGenerators(base.BaseTestCase):
         self.assertEqual(target_str, str(model))
 
     def test_package_report_generator_without_vendor_string(self):
-        class VersionObj(object):
+        class VersionObj:
             def product_string(self):
                 return 'Sharp Cheddar'
 

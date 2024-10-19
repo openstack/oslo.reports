@@ -48,7 +48,7 @@ class StackTraceView(jv.JinjaView):
     )
 
 
-class GreenThreadView(object):
+class GreenThreadView:
     """A Green Thread View
 
     This view displays a green thread provided by the data
@@ -64,7 +64,7 @@ class GreenThreadView(object):
         )
 
 
-class ThreadView(object):
+class ThreadView:
     """A Thread Collection View
 
     This view displays a python thread provided by the data
@@ -75,6 +75,6 @@ class ThreadView(object):
 
     def __call__(self, model):
         return self.FORMAT_STR.format(
-            thread_str=" Thread #{0} ".format(model.thread_id),
+            thread_str=" Thread #{} ".format(model.thread_id),
             stack_trace=model.stack_trace
         )

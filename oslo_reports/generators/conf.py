@@ -24,7 +24,7 @@ from oslo_config import cfg
 from oslo_reports.models import conf as cm
 
 
-class ConfigReportGenerator(object):
+class ConfigReportGenerator:
     """A Configuration Data Generator
 
     This generator returns

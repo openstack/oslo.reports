@@ -30,7 +30,7 @@ import xml.etree.ElementTree as ET
 from oslo_reports import _utils as utils
 
 
-class KeyValueView(object):
+class KeyValueView:
     """A Key-Value XML View
 
     This view performs advanced serialization of a data model
