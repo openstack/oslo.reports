@@ -23,7 +23,7 @@ generators for generating the model in
 from oslo_reports.models import version as vm
 
 
-class PackageReportGenerator(object):
+class PackageReportGenerator:
     """A Package Information Data Generator
 
     This generator returns

@@ -35,7 +35,7 @@ class PackageModel(mwdv.ModelWithDefaultViews):
     """
 
     def __init__(self, vendor, product, version):
-        super(PackageModel, self).__init__(
+        super().__init__(
             text_view=generic_text_views.KeyValueView()
         )
 

@@ -18,7 +18,7 @@ This package defines several text views with headers
 """
 
 
-class HeaderView(object):
+class HeaderView:
     """A Text View With a Header
 
     This view simply serializes the model and places the given
@@ -48,4 +48,4 @@ class TitledView(HeaderView):
     FORMAT_STR = ('=' * 72) + "\n===={0: ^64}====\n" + ('=' * 72)
 
     def __init__(self, title):
-        super(TitledView, self).__init__(self.FORMAT_STR.format(title))
+        super().__init__(self.FORMAT_STR.format(title))

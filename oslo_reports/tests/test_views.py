@@ -121,7 +121,7 @@ class TestModelReportType(base.BaseTestCase):
 
 class TestGenericXMLView(base.BaseTestCase):
     def setUp(self):
-        super(TestGenericXMLView, self).setUp()
+        super().setUp()
 
         self.model = mwdv_generator()
         self.model.set_current_view_type('xml')
@@ -191,7 +191,7 @@ class TestGenericXMLView(base.BaseTestCase):
 
 class TestGenericJSONViews(base.BaseTestCase):
     def setUp(self):
-        super(TestGenericJSONViews, self).setUp()
+        super().setUp()
 
         self.model = mwdv_generator()
         self.model.set_current_view_type('json')
@@ -260,7 +260,7 @@ class TestGenericJSONViews(base.BaseTestCase):
 
 class TestGenericTextViews(base.BaseTestCase):
     def setUp(self):
-        super(TestGenericTextViews, self).setUp()
+        super().setUp()
 
         self.model = mwdv_generator()
         self.model.set_current_view_type('text')
@@ -412,7 +412,7 @@ class TestJinjaView(base.BaseTestCase):
     MM_OPEN, MM_FILE = get_open_mocks(TEMPL_STR)
 
     def setUp(self):
-        super(TestJinjaView, self).setUp()
+        super().setUp()
         self.model = base_model.ReportModel(data={'int': 1, 'string': 'value'})
 
     @mock.mock_open(MM_OPEN)

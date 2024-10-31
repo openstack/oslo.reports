@@ -46,7 +46,7 @@ def _find_objects(t):
     return [o for o in gc.get_objects() if isinstance(o, t)]
 
 
-class ThreadReportGenerator(object):
+class ThreadReportGenerator:
     """A Thread Data Generator
 
     This generator returns a collection of
@@ -63,10 +63,10 @@ class ThreadReportGenerator(object):
         self.traceback = curr_thread_traceback
 
     def __call__(self):
-        threadModels = dict(
-            (thread_id, tm.ThreadModel(thread_id, stack))
+        threadModels = {
+            thread_id: tm.ThreadModel(thread_id, stack)
             for thread_id, stack in sys._current_frames().items()
-        )
+        }
 
         if self.traceback is not None:
             curr_thread_id = threading.current_thread().ident
@@ -77,7 +77,7 @@ class ThreadReportGenerator(object):
                                           text_view=text_views.MultiView())
 
 
-class GreenThreadReportGenerator(object):
+class GreenThreadReportGenerator:
     """A Green Thread Data Generator
 
     This generator returns a collection of

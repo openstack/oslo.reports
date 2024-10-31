@@ -23,7 +23,7 @@ sections.
 from oslo_reports.views.text import header as header_views
 
 
-class BasicReport(object):
+class BasicReport:
     """A Basic Report
 
     A Basic Report consists of a collection of :class:`ReportSection`
@@ -76,7 +76,7 @@ class BasicReport(object):
         return "\n".join(str(sect) for sect in self.sections)
 
 
-class ReportSection(object):
+class ReportSection:
     """A Report Section
 
     A report section contains a generator and a top-level view. When something
@@ -122,7 +122,7 @@ class ReportOfType(BasicReport):
 
     def __init__(self, tp):
         self.output_type = tp
-        super(ReportOfType, self).__init__()
+        super().__init__()
 
     def add_section(self, view, generator, index=None):
         def with_type(gen):
@@ -136,7 +136,7 @@ class ReportOfType(BasicReport):
                 return res
             return newgen
 
-        super(ReportOfType, self).add_section(
+        super().add_section(
             view,
             with_type(generator),
             index
@@ -153,7 +153,7 @@ class TextReport(ReportOfType):
     """
 
     def __init__(self, name):
-        super(TextReport, self).__init__('text')
+        super().__init__('text')
         self.name = name
         # add a title with a generator that creates an empty result model
         self.add_section(name, lambda: ('|' * 72) + "\n\n")
@@ -183,6 +183,4 @@ class TextReport(ReportOfType):
         :type index: int or None
         """
 
-        super(TextReport, self).add_section(header_views.TitledView(heading),
-                                            generator,
-                                            index)
+        super().add_section(header_views.TitledView(heading), generator, index)

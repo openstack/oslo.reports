@@ -24,7 +24,7 @@ import copy
 import jinja2
 
 
-class JinjaView(object):
+class JinjaView:
     """A Jinja View
 
     This view renders the given model using the provided Jinja
@@ -49,7 +49,7 @@ class JinjaView(object):
             self._text = self.VIEW_TEXT
         except AttributeError:
             if path is not None:
-                with open(path, 'r') as f:
+                with open(path) as f:
                     self._text = f.read()
             elif text is not None:
                 self._text = text

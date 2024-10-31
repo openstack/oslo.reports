@@ -37,7 +37,7 @@ CONF = oslo_config.cfg.CONF
 opts.set_defaults(CONF)
 
 
-class FakeVersionObj(object):
+class FakeVersionObj:
     def vendor_string(self):
         return 'Cheese Shoppe'
 
@@ -59,7 +59,7 @@ def skip_body_lines(start_line, report_lines):
 
 class GmrConfigFixture(fixture.Config):
     def setUp(self):
-        super(GmrConfigFixture, self).setUp()
+        super().setUp()
 
         self.conf.set_override(
             'file_event_handler',
@@ -77,7 +77,7 @@ class GmrConfigFixture(fixture.Config):
 
 class TestGuruMeditationReport(base.BaseTestCase):
     def setUp(self):
-        super(TestGuruMeditationReport, self).setUp()
+        super().setUp()
 
         self.curr_g = greenlet.getcurrent()
 
@@ -242,6 +242,6 @@ class TestGuruMeditationReport(base.BaseTestCase):
         self.assertIn('RunFail', sys.stderr.getvalue())
 
     def tearDown(self):
-        super(TestGuruMeditationReport, self).tearDown()
+        super().tearDown()
         if self.old_stderr is not None:
             sys.stderr = self.old_stderr

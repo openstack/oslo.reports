@@ -32,7 +32,7 @@ class ProcessModel(mwdv.ModelWithDefaultViews):
     """
 
     def __init__(self, process):
-        super(ProcessModel, self).__init__(
+        super().__init__(
             text_view=text_views.ProcessView())
 
         self['pid'] = process.pid

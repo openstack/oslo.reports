@@ -30,7 +30,7 @@ from oslo_serialization import jsonutils as json
 from oslo_reports import _utils as utils
 
 
-class BasicKeyValueView(object):
+class BasicKeyValueView:
     """A Basic Key-Value JSON View
 
     This view performs a naive serialization of a model
@@ -43,7 +43,7 @@ class BasicKeyValueView(object):
         return res
 
 
-class KeyValueView(object):
+class KeyValueView:
     """A Key-Value JSON View
 
     This view performs advanced serialization to a model

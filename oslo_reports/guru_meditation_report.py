@@ -84,7 +84,7 @@ except ImportError:
 LOG = logging.getLogger(__name__)
 
 
-class GuruMeditation(object):
+class GuruMeditation:
     """A Guru Meditation Report Mixin/Base Class
 
     This class is a base class for Guru Meditation Reports.
@@ -104,7 +104,7 @@ class GuruMeditation(object):
         self.version_obj = version_obj
         self.traceback = sig_handler_tb
 
-        super(GuruMeditation, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.start_section_index = len(self.sections)
 
     @classmethod
@@ -179,8 +179,8 @@ class GuruMeditation(object):
                         mtime = stat.st_mtime
                 except OSError:
                     msg = ("Guru Meditation Report cannot read " +
-                           "'{0}' file".format(filepath))
-                    raise IOError(msg)
+                           "'{}' file".format(filepath))
+                    raise OSError(msg)
                 finally:
                     time.sleep(interval)
 
@@ -223,7 +223,7 @@ class GuruMeditation(object):
             if log_dir:
                 service_name = service_name or os.path.basename(
                     inspect.stack()[-1][1])
-                filename = "%s_gurumeditation_%s" % (
+                filename = "{}_gurumeditation_{}".format(
                     service_name, timeutils.utcnow().strftime(
                         cls.timestamp_fmt))
                 filepath = os.path.join(log_dir, filename)
@@ -263,7 +263,7 @@ class GuruMeditation(object):
 
     def run(self):
         self._readd_sections()
-        return super(GuruMeditation, self).run()
+        return super().run()
 
 
 # GuruMeditation must come first to get the correct MRO
@@ -291,5 +291,4 @@ class TextGuruMeditation(GuruMeditation, report.TextReport):
     """
 
     def __init__(self, version_obj, traceback=None):
-        super(TextGuruMeditation, self).__init__(version_obj, traceback,
-                                                 'Guru Meditation')
+        super().__init__(version_obj, traceback, 'Guru Meditation')

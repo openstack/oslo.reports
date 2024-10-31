@@ -21,7 +21,7 @@ serializing models into human-readable text.
 from collections import abc
 
 
-class MultiView(object):
+class MultiView:
     """A Text View Containing Multiple Views
 
     This view simply serializes each
@@ -37,7 +37,7 @@ class MultiView(object):
         return "\n".join(res)
 
 
-class BasicKeyValueView(object):
+class BasicKeyValueView:
     """A Basic Key-Value Text View
 
     This view performs a naive serialization of a model into
@@ -53,7 +53,7 @@ class BasicKeyValueView(object):
         return res
 
 
-class KeyValueView(object):
+class KeyValueView:
     """A Key-Value Text View
 
     This view performs an advanced serialization of a model
@@ -151,7 +151,7 @@ class KeyValueView(object):
         return "\n".join(serialize(model, None, -1))
 
 
-class TableView(object):
+class TableView:
     """A Basic Table Text View
 
     This view performs serialization of data into a basic table with
@@ -196,6 +196,6 @@ class TableView(object):
             row = [str(raw_row[prop_name])
                    for prop_name in self.column_values]
             # double format is in case we have roundoff error
-            res += '{0: <72}\n'.format(self.row_fmt_str.format(cv=row))
+            res += '{: <72}\n'.format(self.row_fmt_str.format(cv=row))
 
         return res

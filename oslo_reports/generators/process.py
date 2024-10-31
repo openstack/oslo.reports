@@ -25,7 +25,7 @@ import psutil
 from oslo_reports.models import process as pm
 
 
-class ProcessReportGenerator(object):
+class ProcessReportGenerator:
     """A Process Data Generator
 
     This generator returns a

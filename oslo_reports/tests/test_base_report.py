@@ -21,7 +21,7 @@ from oslo_reports.models import base as base_model
 from oslo_reports import report
 
 
-class BasicView(object):
+class BasicView:
     def __call__(self, model):
         res = ""
         for k in sorted(model.keys()):
@@ -35,7 +35,7 @@ def basic_generator():
 
 class TestBasicReport(base.BaseTestCase):
     def setUp(self):
-        super(TestBasicReport, self).setUp()
+        super().setUp()
 
         self.report = report.BasicReport()
 
@@ -64,7 +64,7 @@ class TestBasicReport(base.BaseTestCase):
 
 class TestBaseModel(base.BaseTestCase):
     def test_submodel_attached_view(self):
-        class TmpView(object):
+        class TmpView:
             def __call__(self, model):
                 return '{len: ' + str(len(model.c)) + '}'
 
