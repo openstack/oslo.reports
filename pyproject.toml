@@ -41,3 +41,7 @@ greenlet = [
 
 [tool.setuptools]
 packages = ["oslo_reports"]
+
+[tool.bandit]
+exclude_dirs = ["tests"]
+skips = ['B314', 'B405']
