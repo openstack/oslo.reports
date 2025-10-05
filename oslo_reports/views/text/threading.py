@@ -75,6 +75,6 @@ class ThreadView:
 
     def __call__(self, model):
         return self.FORMAT_STR.format(
-            thread_str=" Thread #{} ".format(model.thread_id),
+            thread_str=f" Thread #{model.thread_id} ",
             stack_trace=model.stack_trace
         )

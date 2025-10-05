@@ -48,7 +48,7 @@ class BasicKeyValueView:
     def __call__(self, model):
         res = ""
         for key in sorted(model):
-            res += "{key} = {value}\n".format(key=key, value=model[key])
+            res += f"{key} = {model[key]}\n"
 
         return res
 
@@ -173,7 +173,7 @@ class TableView:
         self.column_width = (72 - len(column_names) + 1) // len(column_names)
 
         column_headers = "|".join(
-            "{{ch[{n}]: ^{width}}}".format(n=n, width=self.column_width)
+            f"{{ch[{n}]: ^{self.column_width}}}"
             for n in range(len(column_names))
         )
 
@@ -186,7 +186,7 @@ class TableView:
         self.header_fmt_str = column_headers + "\n" + vert_divider + "\n"
 
         self.row_fmt_str = "|".join(
-            "{{cv[{n}]: ^{width}}}".format(n=n, width=self.column_width)
+            f"{{cv[{n}]: ^{self.column_width}}}"
             for n in range(len(column_values))
         )
 
@@ -196,6 +196,6 @@ class TableView:
             row = [str(raw_row[prop_name])
                    for prop_name in self.column_values]
             # double format is in case we have roundoff error
-            res += '{: <72}\n'.format(self.row_fmt_str.format(cv=row))
+            res += f'{self.row_fmt_str.format(cv=row): <72}\n'
 
         return res

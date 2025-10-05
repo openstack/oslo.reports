@@ -179,7 +179,7 @@ class GuruMeditation:
                         mtime = stat.st_mtime
                 except OSError:
                     msg = ("Guru Meditation Report cannot read " +
-                           "'{}' file".format(filepath))
+                           f"'{filepath}' file")
                     raise OSError(msg)
                 finally:
                     time.sleep(interval)
