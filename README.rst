@@ -1,15 +1,10 @@
-========================
-Team and repository tags
-========================
+============
+oslo.reports
+============
 
 .. image:: https://governance.openstack.org/tc/badges/oslo.reports.svg
-    :target: https://governance.openstack.org/tc/reference/tags/index.html
 
 .. Change things from this point on
-
-===================================
-oslo.reports
-===================================
 
 .. image:: https://img.shields.io/pypi/v/oslo.reports.svg
     :target: https://pypi.org/project/oslo.reports/
