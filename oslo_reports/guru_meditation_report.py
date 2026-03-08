@@ -31,6 +31,7 @@ For example, in a nova command module (under nova/cmd):
    CONF = cfg.CONF
    # maybe import some options here...
 
+
    def main():
        oslo_logging.register_options(CONF)
        gmr_opts.set_defaults(CONF)
@@ -38,12 +39,14 @@ For example, in a nova command module (under nova/cmd):
        CONF(sys.argv[1:], default_config_files=['myapp.conf'])
        oslo_logging.setup(CONF, 'myapp')
 
-       gmr.TextGuruMeditation.register_section('Some Special Section',
-                                           special_section_generator)
+       gmr.TextGuruMeditation.register_section(
+           'Some Special Section', special_section_generator
+       )
        gmr.TextGuruMeditation.setup_autorun(version_object, conf=CONF)
 
-       server = service.Service.create(binary='some-service',
-                                       topic=CONF.some_service_topic)
+       server = service.Service.create(
+           binary='some-service', topic=CONF.some_service_topic
+       )
        service.serve(server)
        service.wait()
 
@@ -124,9 +127,15 @@ class GuruMeditation:
             cls.persistent_sections = [[section_title, generator]]
 
     @classmethod
-    def setup_autorun(cls, version, service_name=None,
-                      log_dir=None, signum=None, conf=None,
-                      setup_signal=True):
+    def setup_autorun(
+        cls,
+        version,
+        service_name=None,
+        log_dir=None,
+        signum=None,
+        conf=None,
+        setup_signal=True,
+    ):
         """Set Up Auto-Run
 
         This method sets up the Guru Meditation Report to automatically
@@ -154,20 +163,27 @@ class GuruMeditation:
             cls._setup_file_watcher(
                 conf.oslo_reports.file_event_handler,
                 conf.oslo_reports.file_event_handler_interval,
-                version, service_name, log_dir)
+                version,
+                service_name,
+                log_dir,
+            )
         else:
             if setup_signal and hasattr(signal, 'SIGUSR2'):
-                cls._setup_signal(signal.SIGUSR2,
-                                  version, service_name, log_dir)
+                cls._setup_signal(
+                    signal.SIGUSR2, version, service_name, log_dir
+                )
 
     @classmethod
-    def _setup_file_watcher(cls, filepath, interval, version, service_name,
-                            log_dir):
-
+    def _setup_file_watcher(
+        cls, filepath, interval, version, service_name, log_dir
+    ):
         st = os.stat(filepath)
         if not bool(st.st_mode & stat.S_IRGRP):
-            LOG.error("Guru Meditation Report does not have read "
-                      "permissions to '%s' file.", filepath)
+            LOG.error(
+                "Guru Meditation Report does not have read "
+                "permissions to '%s' file.",
+                filepath,
+            )
 
         def _handler():
             mtime = time.time()
@@ -178,8 +194,10 @@ class GuruMeditation:
                         cls.handle_signal(version, service_name, log_dir, None)
                         mtime = stat.st_mtime
                 except OSError:
-                    msg = ("Guru Meditation Report cannot read " +
-                           f"'{filepath}' file")
+                    msg = (
+                        "Guru Meditation Report cannot read "
+                        + f"'{filepath}' file"
+                    )
                     raise OSError(msg)
                 finally:
                     time.sleep(interval)
@@ -190,9 +208,10 @@ class GuruMeditation:
 
     @classmethod
     def _setup_signal(cls, signum, version, service_name, log_dir):
-        signal.signal(signum,
-                      lambda sn, f: cls.handle_signal(
-                          version, service_name, log_dir, f))
+        signal.signal(
+            signum,
+            lambda sn, f: cls.handle_signal(version, service_name, log_dir, f),
+        )
 
     @classmethod
     def handle_signal(cls, version, service_name, log_dir, frame):
@@ -217,43 +236,44 @@ class GuruMeditation:
             res = cls(version, frame).run()
         except Exception:
             traceback.print_exc(file=sys.stderr)
-            print("Unable to run Guru Meditation Report!",
-                  file=sys.stderr)
+            print("Unable to run Guru Meditation Report!", file=sys.stderr)
         else:
             if log_dir:
                 service_name = service_name or os.path.basename(
-                    inspect.stack()[-1][1])
-                filename = "{}_gurumeditation_{}".format(
-                    service_name, timeutils.utcnow().strftime(
-                        cls.timestamp_fmt))
+                    inspect.stack()[-1][1]
+                )
+                timestamp = timeutils.utcnow().strftime(cls.timestamp_fmt)
+                filename = f"{service_name}_gurumeditation_{timestamp}"
                 filepath = os.path.join(log_dir, filename)
                 try:
                     with open(filepath, "w") as dumpfile:
                         dumpfile.write(res)
                 except Exception:
-                    print("Unable to dump Guru Meditation Report to file %s" %
-                          (filepath,), file=sys.stderr)
+                    print(
+                        f"Unable to dump Guru Meditation Report to file "
+                        f"{filepath}",
+                        file=sys.stderr,
+                    )
             else:
                 print(res, file=sys.stderr)
 
     def _readd_sections(self):
-        del self.sections[self.start_section_index:]
+        del self.sections[self.start_section_index :]
 
-        self.add_section('Package',
-                         pgen.PackageReportGenerator(self.version_obj))
+        self.add_section(
+            'Package', pgen.PackageReportGenerator(self.version_obj)
+        )
 
-        self.add_section('Threads',
-                         tgen.ThreadReportGenerator(self.traceback))
+        self.add_section('Threads', tgen.ThreadReportGenerator(self.traceback))
 
         if greenlet:
-            self.add_section('Green Threads',
-                             tgen.GreenThreadReportGenerator())
+            self.add_section(
+                'Green Threads', tgen.GreenThreadReportGenerator()
+            )
 
-        self.add_section('Processes',
-                         prgen.ProcessReportGenerator())
+        self.add_section('Processes', prgen.ProcessReportGenerator())
 
-        self.add_section('Configuration',
-                         cgen.ConfigReportGenerator())
+        self.add_section('Configuration', cgen.ConfigReportGenerator())
 
         try:
             for section_title, generator in self.persistent_sections:

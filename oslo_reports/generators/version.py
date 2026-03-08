@@ -51,10 +51,12 @@ class PackageReportGenerator:
             product_string = None
 
         if hasattr(self.version_obj, "version_string_with_package"):
-            version_string_with_package = self.version_obj.\
-                version_string_with_package()
+            version_string_with_package = (
+                self.version_obj.version_string_with_package()
+            )
         else:
             version_string_with_package = None
 
-        return vm.PackageModel(vendor_string, product_string,
-                               version_string_with_package)
+        return vm.PackageModel(
+            vendor_string, product_string, version_string_with_package
+        )

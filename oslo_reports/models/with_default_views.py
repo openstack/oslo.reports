@@ -54,7 +54,7 @@ class ModelWithDefaultViews(base_model.ReportModel):
         self.views = {
             'text': textviews.KeyValueView(),
             'json': jsonviews.KeyValueView(),
-            'xml': xmlviews.KeyValueView()
+            'xml': xmlviews.KeyValueView(),
         }
 
         newargs = copy.copy(kwargs)
@@ -73,9 +73,12 @@ class ModelWithDefaultViews(base_model.ReportModel):
             if self.views[attrname[3:]] is not None:
                 return lambda: self.views[attrname[3:]](self)
             else:
-                raise NotImplementedError((
-                    "Model {cn.__module__}.{cn.__name__} does not have" +
-                    " a default view for "
-                    "{tp}").format(cn=type(self), tp=attrname[3:]))
+                raise NotImplementedError(
+                    (
+                        "Model {cn.__module__}.{cn.__name__} does not have"
+                        + " a default view for "
+                        "{tp}"
+                    ).format(cn=type(self), tp=attrname[3:])
+                )
         else:
             return super().__getattr__(attrname)

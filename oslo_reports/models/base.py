@@ -56,8 +56,9 @@ class ReportModel(abc.MutableMapping):
                 # convert a list [a, b, c] to a dict {0: a, 1: b, 2: c}
                 self.data = dict(enumerate(data))
             else:
-                raise TypeError('Data for the model must be a sequence '
-                                'or mapping.')
+                raise TypeError(
+                    'Data for the model must be a sequence or mapping.'
+                )
         else:
             self.data = {}
 
@@ -74,15 +75,15 @@ class ReportModel(abc.MutableMapping):
 
     def __repr__(self):
         if self.attached_view is not None:
-            return ("<Model {cl.__module__}.{cl.__name__} {dt}"
-                    " with view {vw.__module__}."
-                    "{vw.__name__}>").format(cl=type(self),
-                                             dt=self.data,
-                                             vw=type(self.attached_view))
+            return (
+                "<Model {cl.__module__}.{cl.__name__} {dt}"
+                " with view {vw.__module__}."
+                "{vw.__name__}>"
+            ).format(cl=type(self), dt=self.data, vw=type(self.attached_view))
         else:
-            return ("<Model {cl.__module__}.{cl.__name__} {dt}"
-                    " with no view>").format(cl=type(self),
-                                             dt=self.data)
+            return (
+                "<Model {cl.__module__}.{cl.__name__} {dt} with no view>"
+            ).format(cl=type(self), dt=self.data)
 
     def __getitem__(self, attrname):
         return self.data[attrname]
@@ -108,9 +109,7 @@ class ReportModel(abc.MutableMapping):
             # we don't have that key in data, and the
             # model class doesn't have that attribute
             raise AttributeError(
-                "'{cl}' object has no attribute '{an}'".format(
-                    cl=type(self).__name__, an=attrname
-                )
+                f"'{type(self).__name__}' object has no attribute '{attrname}'"
             )
 
     def __len__(self):

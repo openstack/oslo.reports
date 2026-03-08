@@ -70,11 +70,13 @@ class ThreadReportGenerator:
 
         if self.traceback is not None:
             curr_thread_id = threading.current_thread().ident
-            threadModels[curr_thread_id] = tm.ThreadModel(curr_thread_id,
-                                                          self.traceback)
+            threadModels[curr_thread_id] = tm.ThreadModel(
+                curr_thread_id, self.traceback
+            )
 
-        return mwdv.ModelWithDefaultViews(threadModels,
-                                          text_view=text_views.MultiView())
+        return mwdv.ModelWithDefaultViews(
+            threadModels, text_view=text_views.MultiView()
+        )
 
 
 class GreenThreadReportGenerator:
@@ -98,5 +100,6 @@ class GreenThreadReportGenerator:
             for gr in _find_objects(greenlet.greenlet)
         ]
 
-        return mwdv.ModelWithDefaultViews(threadModels,
-                                          text_view=text_views.MultiView())
+        return mwdv.ModelWithDefaultViews(
+            threadModels, text_view=text_views.MultiView()
+        )

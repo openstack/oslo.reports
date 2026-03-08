@@ -19,7 +19,6 @@ All reports take the form of a report class containing various report
 sections.
 """
 
-
 from oslo_reports.views.text import header as header_views
 
 
@@ -111,11 +110,12 @@ class ReportOfType(BasicReport):
 
     .. seealso::
 
-       Class :class:`oslo_reports.models.with_default_view.ModelWithDefaultView` # noqa
-          (the entire class)
+       Class
+       :class:`oslo_reports.models.with_default_view.ModelWithDefaultView` (the
+       entire class)
 
        Class :class:`oslo_reports.models.base.ReportModel`
-           :func:`oslo_reports.models.base.ReportModel.set_current_view_type` # noqa
+       (:func:`oslo_reports.models.base.ReportModel.set_current_view_type`)
 
     :param str tp: the type of the report
     """
@@ -134,13 +134,10 @@ class ReportOfType(BasicReport):
                     pass
 
                 return res
+
             return newgen
 
-        super().add_section(
-            view,
-            with_type(generator),
-            index
-        )
+        super().add_section(view, with_type(generator), index)
 
 
 class TextReport(ReportOfType):

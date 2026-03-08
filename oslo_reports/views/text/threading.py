@@ -59,8 +59,7 @@ class GreenThreadView:
 
     def __call__(self, model):
         return self.FORMAT_STR.format(
-            thread_str=" Green Thread ",
-            stack_trace=model.stack_trace
+            thread_str=" Green Thread ", stack_trace=model.stack_trace
         )
 
 
@@ -76,5 +75,5 @@ class ThreadView:
     def __call__(self, model):
         return self.FORMAT_STR.format(
             thread_str=f" Thread #{model.thread_id} ",
-            stack_trace=model.stack_trace
+            stack_trace=model.stack_trace,
         )

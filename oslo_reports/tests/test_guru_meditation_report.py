@@ -50,8 +50,9 @@ class FakeVersionObj:
 
 def skip_body_lines(start_line, report_lines):
     curr_line = start_line
-    while (len(report_lines[curr_line]) == 0 or
-           report_lines[curr_line][0] != '='):
+    while (
+        len(report_lines[curr_line]) == 0 or report_lines[curr_line][0] != '='
+    ):
         curr_line += 1
 
     return curr_line
@@ -62,17 +63,14 @@ class GmrConfigFixture(fixture.Config):
         super().setUp()
 
         self.conf.set_override(
-            'file_event_handler',
-            '/specific/file',
-            group='oslo_reports')
+            'file_event_handler', '/specific/file', group='oslo_reports'
+        )
         self.conf.set_override(
-            'file_event_handler_interval',
-            10,
-            group='oslo_reports')
+            'file_event_handler_interval', 10, group='oslo_reports'
+        )
         self.conf.set_override(
-            'log_dir',
-            '/var/fake_log',
-            group='oslo_reports')
+            'log_dir', '/var/fake_log', group='oslo_reports'
+        )
 
 
 class TestGuruMeditationReport(base.BaseTestCase):
@@ -90,99 +88,115 @@ class TestGuruMeditationReport(base.BaseTestCase):
     def test_basic_report(self):
         report_lines = self.report.run().split('\n')
 
-        target_str_header = ['========================================================================',  # noqa
-                             '====                        Guru Meditation                         ====',  # noqa
-                             '========================================================================',  # noqa
-                             '||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||',  # noqa
-                             '',
-                             '',
-                             '========================================================================',  # noqa
-                             '====                            Package                             ====',  # noqa
-                             '========================================================================',  # noqa
-                             'product = Sharp Cheddar',
-                             'vendor = Cheese Shoppe',
-                             'version = 1.0.0',
-                             '========================================================================',  # noqa
-                             '====                            Threads                             ====',  # noqa
-                             '========================================================================']  # noqa
+        target_str_header = [
+            '========================================================================',  # noqa
+            '====                        Guru Meditation                         ====',  # noqa
+            '========================================================================',  # noqa
+            '||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||',  # noqa
+            '',
+            '',
+            '========================================================================',  # noqa
+            '====                            Package                             ====',  # noqa
+            '========================================================================',  # noqa
+            'product = Sharp Cheddar',
+            'vendor = Cheese Shoppe',
+            'version = 1.0.0',
+            '========================================================================',  # noqa
+            '====                            Threads                             ====',  # noqa
+            '========================================================================',
+        ]  # noqa
 
         # first the header and version info...
-        self.assertEqual(target_str_header,
-                         report_lines[0:len(target_str_header)])
+        self.assertEqual(
+            target_str_header, report_lines[0 : len(target_str_header)]
+        )
 
         # followed by at least one thread...
         # NOTE(zqfan): add an optional '-' because sys._current_frames()
         # may return a negative thread id on 32 bit operating system.
-        self.assertTrue(re.match(r'------(\s+)Thread #-?\d+\1\s?------',
-                                 report_lines[len(target_str_header)]))
+        self.assertTrue(
+            re.match(
+                r'------(\s+)Thread #-?\d+\1\s?------',
+                report_lines[len(target_str_header)],
+            )
+        )
         self.assertEqual('', report_lines[len(target_str_header) + 1])
 
         # followed by more thread stuff stuff...
         curr_line = skip_body_lines(len(target_str_header) + 2, report_lines)
 
         # followed by at least one green thread
-        target_str_gt = ['========================================================================',  # noqa
-                         '====                         Green Threads                          ====',  # noqa
-                         '========================================================================',  # noqa
-                         '------                        Green Thread                        ------',  # noqa
-                         '']
+        target_str_gt = [
+            '========================================================================',  # noqa
+            '====                         Green Threads                          ====',  # noqa
+            '========================================================================',  # noqa
+            '------                        Green Thread                        ------',  # noqa
+            '',
+        ]
         end_bound = curr_line + len(target_str_gt)
-        self.assertEqual(target_str_gt,
-                         report_lines[curr_line:end_bound])
+        self.assertEqual(target_str_gt, report_lines[curr_line:end_bound])
 
         # followed by some more green thread stuff
-        curr_line = skip_body_lines(curr_line + len(target_str_gt),
-                                    report_lines)
+        curr_line = skip_body_lines(
+            curr_line + len(target_str_gt), report_lines
+        )
 
         # followed by the processes header
-        target_str_p_head = ['========================================================================',  # noqa
-                             '====                           Processes                            ====',  # noqa
-                             '========================================================================']  # noqa
+        target_str_p_head = [
+            '========================================================================',  # noqa
+            '====                           Processes                            ====',  # noqa
+            '========================================================================',
+        ]  # noqa
         end_bound = curr_line + len(target_str_p_head)
-        self.assertEqual(target_str_p_head,
-                         report_lines[curr_line:end_bound])
+        self.assertEqual(target_str_p_head, report_lines[curr_line:end_bound])
 
         curr_line += len(target_str_p_head)
 
         # followed by at least one process
-        self.assertTrue(re.match(r"Process \d+ \(under \d+\)",
-                                 report_lines[curr_line]))
+        self.assertTrue(
+            re.match(r"Process \d+ \(under \d+\)", report_lines[curr_line])
+        )
 
         # followed by some more process stuff
         curr_line = skip_body_lines(curr_line + 1, report_lines)
 
         # followed finally by the configuration
-        target_str_config = ['========================================================================',  # noqa
-                             '====                         Configuration                          ====',  # noqa
-                             '========================================================================',  # noqa
-                             '']
+        target_str_config = [
+            '========================================================================',  # noqa
+            '====                         Configuration                          ====',  # noqa
+            '========================================================================',  # noqa
+            '',
+        ]
         end_bound = curr_line + len(target_str_config)
-        self.assertEqual(target_str_config,
-                         report_lines[curr_line:end_bound])
+        self.assertEqual(target_str_config, report_lines[curr_line:end_bound])
 
     def test_reg_persistent_section(self):
         def fake_gen():
-            fake_data = {'cheddar': ['sharp', 'mild'],
-                         'swiss': ['with holes', 'with lots of holes'],
-                         'american': ['orange', 'yellow']}
+            fake_data = {
+                'cheddar': ['sharp', 'mild'],
+                'swiss': ['with holes', 'with lots of holes'],
+                'american': ['orange', 'yellow'],
+            }
 
             return mwdv.ModelWithDefaultViews(data=fake_data)
 
         gmr.TextGuruMeditation.register_section('Cheese Types', fake_gen)
 
         report_lines = self.report.run()
-        target_lst = ['========================================================================',  # noqa
-                      '====                          Cheese Types                          ====',  # noqa
-                      '========================================================================',  # noqa
-                      'american = ',
-                      '  orange',
-                      '  yellow',
-                      'cheddar = ',
-                      '  mild',
-                      '  sharp',
-                      'swiss = ',
-                      '  with holes',
-                      '  with lots of holes']
+        target_lst = [
+            '========================================================================',  # noqa
+            '====                          Cheese Types                          ====',  # noqa
+            '========================================================================',  # noqa
+            'american = ',
+            '  orange',
+            '  yellow',
+            'cheddar = ',
+            '  mild',
+            '  sharp',
+            'swiss = ',
+            '  with holes',
+            '  with lots of holes',
+        ]
         target_str = '\n'.join(target_lst)
         self.assertIn(target_str, report_lines)
 
@@ -199,7 +213,8 @@ class TestGuruMeditationReport(base.BaseTestCase):
         version = FakeVersionObj()
         gmr.TextGuruMeditation.setup_autorun(version, conf=self.CONF)
         mock_setup_fh.assert_called_once_with(
-            '/specific/file', 10, version, None, '/var/fake_log')
+            '/specific/file', 10, version, None, '/var/fake_log'
+        )
 
     @mock.patch('os.stat')
     @mock.patch('time.sleep')
@@ -211,21 +226,28 @@ class TestGuruMeditationReport(base.BaseTestCase):
         gmr.TextGuruMeditation._setup_file_watcher(
             self.CONF.oslo_reports.file_event_handler,
             self.CONF.oslo_reports.file_event_handler_interval,
-            version, None, self.CONF.oslo_reports.log_dir)
+            version,
+            None,
+            self.CONF.oslo_reports.log_dir,
+        )
 
         mock_stat.assert_called_once_with('/specific/file')
         self.assertEqual(1, mock_thread.called)
 
-    @mock.patch('oslo_utils.timeutils.utcnow',
-                return_value=datetime.datetime(2014, 1, 1, 12, 0, 0))
+    @mock.patch(
+        'oslo_utils.timeutils.utcnow',
+        return_value=datetime.datetime(2014, 1, 1, 12, 0, 0),
+    )
     def test_register_autorun_log_dir(self, mock_strtime):
         log_dir = self.useFixture(fixtures.TempDir()).path
         gmr.TextGuruMeditation.setup_autorun(
-            FakeVersionObj(), "fake-service", log_dir)
+            FakeVersionObj(), "fake-service", log_dir
+        )
 
         os.kill(os.getpid(), signal.SIGUSR2)
-        with open(os.path.join(
-                log_dir, "fake-service_gurumeditation_20140101120000")) as df:
+        with open(
+            os.path.join(log_dir, "fake-service_gurumeditation_20140101120000")
+        ) as df:
             self.assertIn('Guru Meditation', df.read())
 
     @mock.patch.object(gmr.TextGuruMeditation, 'run')

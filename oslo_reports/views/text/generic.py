@@ -88,14 +88,16 @@ class KeyValueView:
     :type before_list: str or None
     """
 
-    def __init__(self,
-                 indent_str='  ',
-                 key_sep=' = ',
-                 dict_sep=' = ',
-                 list_sep=' = ',
-                 anon_dict='[dict]',
-                 before_dict=None,
-                 before_list=None):
+    def __init__(
+        self,
+        indent_str='  ',
+        key_sep=' = ',
+        dict_sep=' = ',
+        list_sep=' = ',
+        anon_dict='[dict]',
+        before_dict=None,
+        before_list=None,
+    ):
         self.indent_str = indent_str
         self.key_sep = key_sep
         self.dict_sep = dict_sep
@@ -120,8 +122,7 @@ class KeyValueView:
 
                 for key in sorted(root, key=str):
                     res.extend(serialize(root[key], key, indent + 1))
-            elif (isinstance(root, abc.Sequence) and
-                    not isinstance(root, str)):
+            elif isinstance(root, abc.Sequence) and not isinstance(root, str):
                 if rootkey is not None:
                     res[0] += self.list_sep
                     if self.before_list is not None:
@@ -136,8 +137,10 @@ class KeyValueView:
                     if rootkey is not None:
                         res[0] += self.dict_sep
 
-                    list_root = [(self.indent_str * (indent + 1)) + line
-                                 for line in str_root.split('\n')]
+                    list_root = [
+                        (self.indent_str * (indent + 1)) + line
+                        for line in str_root.split('\n')
+                    ]
                     res.extend(list_root)
                 else:
                     # just a normal key or list entry
@@ -193,8 +196,7 @@ class TableView:
     def __call__(self, model):
         res = self.header_fmt_str.format(ch=self.column_names)
         for raw_row in model[self.table_prop_name]:
-            row = [str(raw_row[prop_name])
-                   for prop_name in self.column_values]
+            row = [str(raw_row[prop_name]) for prop_name in self.column_values]
             # double format is in case we have roundoff error
             res += f'{self.row_fmt_str.format(cv=row): <72}\n'
 

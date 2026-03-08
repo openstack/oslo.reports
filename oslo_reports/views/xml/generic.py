@@ -58,7 +58,7 @@ class KeyValueView:
         cpy = copy.deepcopy(model)
         for key, valstr in model.items():
             if getattr(valstr, '__is_xml__', False):
-                cpy[key] = ET.fromstring(valstr)
+                cpy[key] = ET.fromstring(valstr)  # noqa: S314
 
         def serialize(rootmodel, rootkeyname):
             res = ET.Element(rootkeyname)
@@ -66,8 +66,9 @@ class KeyValueView:
             if isinstance(rootmodel, abc.Mapping):
                 for key in sorted(rootmodel):
                     res.append(serialize(rootmodel[key], key))
-            elif (isinstance(rootmodel, abc.Sequence) and
-                    not isinstance(rootmodel, str)):
+            elif isinstance(rootmodel, abc.Sequence) and not isinstance(
+                rootmodel, str
+            ):
                 for val in sorted(rootmodel, key=str):
                     res.append(serialize(val, 'item'))
             elif ET.iselement(rootmodel):
@@ -77,9 +78,9 @@ class KeyValueView:
 
             return res
 
-        str_ = ET.tostring(serialize(cpy,
-                                     self.wrapper_name),
-                           encoding="utf-8").decode("utf-8")
+        str_ = ET.tostring(
+            serialize(cpy, self.wrapper_name), encoding="utf-8"
+        ).decode("utf-8")
         res = utils.StringWithAttrs(str_)
         res.__is_xml__ = True
         return res

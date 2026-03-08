@@ -34,10 +34,9 @@ class StackTraceModel(mwdv.ModelWithDefaultViews):
     """
 
     def __init__(self, stack_state):
-        super().__init__(
-            text_view=text_views.StackTraceView())
+        super().__init__(text_view=text_views.StackTraceView())
 
-        if (stack_state is not None):
+        if stack_state is not None:
             self['lines'] = [
                 {'filename': fn, 'line': ln, 'name': nm, 'code': cd}
                 for fn, ln, nm, cd in traceback.extract_stack(stack_state)
@@ -47,7 +46,8 @@ class StackTraceModel(mwdv.ModelWithDefaultViews):
             if getattr(stack_state, 'f_exc_type', None) is not None:
                 self['root_exception'] = {
                     'type': stack_state.f_exc_type,
-                    'value': stack_state.f_exc_value}
+                    'value': stack_state.f_exc_value,
+                }
             else:
                 self['root_exception'] = None
         else:
@@ -97,4 +97,5 @@ class GreenThreadModel(mwdv.ModelWithDefaultViews):
     def __init__(self, stack):
         super().__init__(
             {'stack_trace': StackTraceModel(stack)},
-            text_view=text_views.GreenThreadView())
+            text_view=text_views.GreenThreadView(),
+        )

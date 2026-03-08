@@ -34,8 +34,9 @@ class ConfigModel(mwdv.ModelWithDefaultViews):
     """
 
     def __init__(self, conf_obj):
-        kv_view = generic_text_views.KeyValueView(dict_sep=": ",
-                                                  before_dict='')
+        kv_view = generic_text_views.KeyValueView(
+            dict_sep=": ", before_dict=''
+        )
         super().__init__(text_view=kv_view)
 
         def opt_title(optname, co):
@@ -48,8 +49,9 @@ class ConfigModel(mwdv.ModelWithDefaultViews):
                 return value
 
         self['default'] = {
-            opt_title(optname, conf_obj):
-            opt_value(conf_obj._opts[optname], conf_obj[optname])
+            opt_title(optname, conf_obj): opt_value(
+                conf_obj._opts[optname], conf_obj[optname]
+            )
             for optname in conf_obj._opts
         }
 
@@ -57,10 +59,11 @@ class ConfigModel(mwdv.ModelWithDefaultViews):
         for groupname in conf_obj._groups:
             group_obj = conf_obj._groups[groupname]
             curr_group_opts = {
-                opt_title(optname, group_obj):
-                opt_value(group_obj._opts[optname],
-                          conf_obj[groupname][optname])
-                for optname in group_obj._opts}
+                opt_title(optname, group_obj): opt_value(
+                    group_obj._opts[optname], conf_obj[groupname][optname]
+                )
+                for optname in group_obj._opts
+            }
             groups[group_obj.name] = curr_group_opts
 
         self.update(groups)

@@ -49,8 +49,9 @@ class TestOpenstackGenerators(base.BaseTestCase):
             def __init__(self, thread_id, tb):
                 self.traceback = tb
 
-        with mock.patch('oslo_reports.models'
-                        '.threading.ThreadModel', FakeModel):
+        with mock.patch(
+            'oslo_reports.models.threading.ThreadModel', FakeModel
+        ):
             model = os_tgen.ThreadReportGenerator("fake traceback")()
             curr_thread = model.get(threading.current_thread().ident, None)
             self.assertIsNotNone(curr_thread, None)
@@ -77,18 +78,23 @@ class TestOpenstackGenerators(base.BaseTestCase):
     def test_config_model(self):
         conf = cfg.ConfigOpts()
         conf.register_opt(cfg.StrOpt('crackers', default='triscuit'))
-        conf.register_opt(cfg.StrOpt('secrets', secret=True,
-                                     default='should not show'))
+        conf.register_opt(
+            cfg.StrOpt('secrets', secret=True, default='should not show')
+        )
         conf.register_group(cfg.OptGroup('cheese', title='Cheese Info'))
-        conf.register_opt(cfg.IntOpt('sharpness', default=1),
-                          group='cheese')
-        conf.register_opt(cfg.StrOpt('name', default='cheddar'),
-                          group='cheese')
-        conf.register_opt(cfg.BoolOpt('from_cow', default=True),
-                          group='cheese')
-        conf.register_opt(cfg.StrOpt('group_secrets', secret=True,
-                                     default='should not show'),
-                          group='cheese')
+        conf.register_opt(cfg.IntOpt('sharpness', default=1), group='cheese')
+        conf.register_opt(
+            cfg.StrOpt('name', default='cheddar'), group='cheese'
+        )
+        conf.register_opt(
+            cfg.BoolOpt('from_cow', default=True), group='cheese'
+        )
+        conf.register_opt(
+            cfg.StrOpt(
+                'group_secrets', secret=True, default='should not show'
+            ),
+            group='cheese',
+        )
 
         model = os_cgen.ConfigReportGenerator(conf)()
         model.set_current_view_type('text')
@@ -103,17 +109,19 @@ class TestOpenstackGenerators(base.BaseTestCase):
         except cfg.NoSuchOptError:
             config_source_line = ''
 
-        target_str = ('\ncheese: \n'
-                      '  from_cow = True\n'
-                      '  group_secrets = ***\n'
-                      '  name = cheddar\n'
-                      '  sharpness = 1\n'
-                      '\n'
-                      'default: \n'
-                      '%s'
-                      '  crackers = triscuit\n'
-                      '  secrets = ***\n'
-                      '  shell_completion = None') % config_source_line
+        target_str = (
+            '\ncheese: \n'
+            '  from_cow = True\n'
+            '  group_secrets = ***\n'
+            '  name = cheddar\n'
+            '  sharpness = 1\n'
+            '\n'
+            'default: \n'
+            f'{config_source_line}'
+            '  crackers = triscuit\n'
+            '  secrets = ***\n'
+            '  shell_completion = None'
+        )
         self.assertEqual(target_str, str(model))
 
     def test_package_report_generator(self):
@@ -130,9 +138,9 @@ class TestOpenstackGenerators(base.BaseTestCase):
         model = os_pgen.PackageReportGenerator(VersionObj())()
         model.set_current_view_type('text')
 
-        target_str = ('product = Sharp Cheddar\n'
-                      'vendor = Cheese Shoppe\n'
-                      'version = 1.0.0')
+        target_str = (
+            'product = Sharp Cheddar\nvendor = Cheese Shoppe\nversion = 1.0.0'
+        )
         self.assertEqual(target_str, str(model))
 
     def test_package_report_generator_without_vendor_string(self):
@@ -146,7 +154,5 @@ class TestOpenstackGenerators(base.BaseTestCase):
         model = os_pgen.PackageReportGenerator(VersionObj())()
         model.set_current_view_type('text')
 
-        target_str = ('product = Sharp Cheddar\n'
-                      'vendor = None\n'
-                      'version = 1.0.0')
+        target_str = 'product = Sharp Cheddar\nvendor = None\nversion = 1.0.0'
         self.assertEqual(target_str, str(model))

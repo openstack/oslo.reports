@@ -61,7 +61,7 @@ class JinjaView:
 
         newtext = self._text.lstrip()
         amt = len(self._text) - len(newtext)
-        if (amt > 0):
+        if amt > 0:
             base_indent = self._text[0:amt]
             lines = self._text.splitlines()
             newlines = []

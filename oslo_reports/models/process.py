@@ -32,8 +32,7 @@ class ProcessModel(mwdv.ModelWithDefaultViews):
     """
 
     def __init__(self, process):
-        super().__init__(
-            text_view=text_views.ProcessView())
+        super().__init__(text_view=text_views.ProcessView())
 
         self['pid'] = process.pid
         self['parent_pid'] = process.ppid()
@@ -41,23 +40,19 @@ class ProcessModel(mwdv.ModelWithDefaultViews):
             self['uids'] = {
                 'real': process.uids().real,
                 'effective': process.uids().effective,
-                'saved': process.uids().saved
+                'saved': process.uids().saved,
             }
         else:
-            self['uids'] = {'real': None,
-                            'effective': None,
-                            'saved': None}
+            self['uids'] = {'real': None, 'effective': None, 'saved': None}
 
         if hasattr(process, 'gids'):
             self['gids'] = {
                 'real': process.gids().real,
                 'effective': process.gids().effective,
-                'saved': process.gids().saved
+                'saved': process.gids().saved,
             }
         else:
-            self['gids'] = {'real': None,
-                            'effective': None,
-                            'saved': None}
+            self['gids'] = {'real': None, 'effective': None, 'saved': None}
 
         self['username'] = process.username()
         self['command'] = process.cmdline()
