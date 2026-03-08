@@ -18,6 +18,8 @@ This module defines a class representing a process,
 potentially with subprocesses.
 """
 
+import psutil
+
 import oslo_reports.models.with_default_views as mwdv
 import oslo_reports.views.text.process as text_views
 
@@ -31,7 +33,7 @@ class ProcessModel(mwdv.ModelWithDefaultViews):
     :param process: a :class:`psutil.Process` object
     """
 
-    def __init__(self, process):
+    def __init__(self, process: psutil.Process) -> None:
         super().__init__(text_view=text_views.ProcessView())
 
         self['pid'] = process.pid

@@ -53,7 +53,7 @@ class TestOpenstackGenerators(base.BaseTestCase):
             'oslo_reports.models.threading.ThreadModel', FakeModel
         ):
             model = os_tgen.ThreadReportGenerator("fake traceback")()
-            curr_thread = model.get(threading.current_thread().ident, None)
+            curr_thread = model.get(threading.current_thread().ident, None)  # type: ignore[arg-type]
             self.assertIsNotNone(curr_thread, None)
             self.assertEqual("fake traceback", curr_thread.traceback)
 

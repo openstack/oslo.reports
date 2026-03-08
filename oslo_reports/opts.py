@@ -49,7 +49,7 @@ _options = [
 ]
 
 
-def list_opts():
+def list_opts() -> list[tuple[str, list[cfg.Opt]]]:
     """Return a list of oslo.config options available in the library.
 
     The returned list includes all oslo.config options which may be registered
@@ -69,7 +69,7 @@ def list_opts():
     return [(_option_group, copy.deepcopy(_options))]
 
 
-def set_defaults(conf):
+def set_defaults(conf: cfg.ConfigOpts) -> None:
     """Set defaults for configuration variables.
 
     Overrides default options values.

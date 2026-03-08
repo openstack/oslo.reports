@@ -20,6 +20,7 @@ see http://jinja.pocoo.org/ .
 """
 
 import copy
+from typing import Any, ClassVar
 
 import jinja2
 
@@ -44,7 +45,15 @@ class JinjaView:
     :param str text: the text of the Jinja template
     """
 
-    def __init__(self, path=None, text=None):
+    VIEW_TEXT: ClassVar[str]
+
+    _text: str
+    _regentemplate: bool
+    _templatecache: jinja2.Template | None
+
+    def __init__(
+        self, path: str | None = None, text: str | None = None
+    ) -> None:
         try:
             self._text = self.VIEW_TEXT
         except AttributeError:
@@ -78,10 +87,10 @@ class JinjaView:
         self._regentemplate = True
         self._templatecache = None
 
-    def __call__(self, model):
+    def __call__(self, model: Any) -> str:
         return self.template.render(**model)
 
-    def __deepcopy__(self, memodict):
+    def __deepcopy__(self, memodict: dict[int, Any]) -> 'JinjaView':
         res = object.__new__(JinjaView)
         res._text = copy.deepcopy(self._text, memodict)
 
@@ -92,7 +101,7 @@ class JinjaView:
         return res
 
     @property
-    def template(self):
+    def template(self) -> jinja2.Template:
         """Get the Compiled Template
 
         Gets the compiled template, using a cached copy if possible
@@ -110,7 +119,7 @@ class JinjaView:
 
         return self._templatecache
 
-    def _gettext(self):
+    def _gettext(self) -> str:
         """Get the Template Text
 
         Gets the text of the current template
@@ -121,7 +130,7 @@ class JinjaView:
 
         return self._text
 
-    def _settext(self, textval):
+    def _settext(self, textval: str) -> None:
         """Set the Template Text
 
         Sets the text of the current template, marking it

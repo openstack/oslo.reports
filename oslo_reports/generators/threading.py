@@ -22,13 +22,16 @@ generators for generating the models in
 import gc
 import sys
 import threading
+from typing import Any, TypeVar
 
 from oslo_reports.models import threading as tm
 from oslo_reports.models import with_default_views as mwdv
 from oslo_reports.views.text import generic as text_views
 
+T = TypeVar('T')
 
-def _find_objects(t):
+
+def _find_objects(t: type[T]) -> list[T]:
     """Find Objects in the GC State
 
     This horribly hackish method locates objects of a
@@ -59,10 +62,10 @@ class ThreadReportGenerator:
     this code is running.
     """
 
-    def __init__(self, curr_thread_traceback=None):
+    def __init__(self, curr_thread_traceback: Any = None) -> None:
         self.traceback = curr_thread_traceback
 
-    def __call__(self):
+    def __call__(self) -> mwdv.ModelWithDefaultViews:
         threadModels = {
             thread_id: tm.ThreadModel(thread_id, stack)
             for thread_id, stack in sys._current_frames().items()
@@ -70,9 +73,10 @@ class ThreadReportGenerator:
 
         if self.traceback is not None:
             curr_thread_id = threading.current_thread().ident
-            threadModels[curr_thread_id] = tm.ThreadModel(
-                curr_thread_id, self.traceback
-            )
+            if curr_thread_id is not None:
+                threadModels[curr_thread_id] = tm.ThreadModel(
+                    curr_thread_id, self.traceback
+                )
 
         return mwdv.ModelWithDefaultViews(
             threadModels, text_view=text_views.MultiView()
@@ -92,7 +96,7 @@ class GreenThreadReportGenerator:
         Function :func:`_find_objects`
     """
 
-    def __call__(self):
+    def __call__(self) -> mwdv.ModelWithDefaultViews:
         import greenlet
 
         threadModels = [

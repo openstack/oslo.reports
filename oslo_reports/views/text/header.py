@@ -27,10 +27,10 @@ class HeaderView:
     :param header: the header (can be anything on which str() can be called)
     """
 
-    def __init__(self, header):
+    def __init__(self, header: object) -> None:
         self.header = header
 
-    def __call__(self, model):
+    def __call__(self, model: object) -> str:
         return f'{self.header}\n{model}'
 
 
@@ -47,5 +47,5 @@ class TitledView(HeaderView):
 
     FORMAT_STR = ('=' * 72) + "\n===={0: ^64}====\n" + ('=' * 72)
 
-    def __init__(self, title):
+    def __init__(self, title: str) -> None:
         super().__init__(self.FORMAT_STR.format(title))

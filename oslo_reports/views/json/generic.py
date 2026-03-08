@@ -24,10 +24,14 @@ such strings specially)
 """
 
 import copy
+from typing import TYPE_CHECKING
 
 from oslo_serialization import jsonutils as json
 
 from oslo_reports import _utils as utils
+
+if TYPE_CHECKING:
+    from oslo_reports.models import base as base_model
 
 
 class BasicKeyValueView:
@@ -37,7 +41,9 @@ class BasicKeyValueView:
     into JSON by simply calling :func:`json.dumps` on the model
     """
 
-    def __call__(self, model):
+    def __call__(
+        self, model: 'base_model.ReportModel'
+    ) -> utils.StringWithAttrs:
         res = utils.StringWithAttrs(json.dumps(model.data, sort_keys=True))
         res.__is_json__ = True
         return res
@@ -54,7 +60,9 @@ class KeyValueView:
     :func:`json.dumps`.
     """
 
-    def __call__(self, model):
+    def __call__(
+        self, model: 'base_model.ReportModel'
+    ) -> utils.StringWithAttrs:
         # this part deals with subviews that were already serialized
         cpy = copy.deepcopy(model)
         for key in model.keys():

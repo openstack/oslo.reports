@@ -56,7 +56,7 @@ class TestModelReportType(base.BaseTestCase):
         )
 
     def test_recursive_type_propagation_with_nested_dicts(self):
-        nested_model = mwdv.ModelWithDefaultViews(json_view='abc')
+        nested_model = mwdv.ModelWithDefaultViews(json_view='abc')  # type: ignore[arg-type]
         data = {'a': 1, 'b': {'c': nested_model}}
         top_model = base_model.ReportModel(data=data)
 

@@ -23,11 +23,15 @@ and non-naive serializers check for this attribute and handle
 such strings specially)
 """
 
-from collections import abc
+from collections.abc import Mapping, Sequence
 import copy
+from typing import TYPE_CHECKING
 import xml.etree.ElementTree as ET
 
 from oslo_reports import _utils as utils
+
+if TYPE_CHECKING:
+    from oslo_reports.models import base as base_model
 
 
 class KeyValueView:
@@ -50,28 +54,30 @@ class KeyValueView:
     :param str wrapper_name: the name of the top-level element
     """
 
-    def __init__(self, wrapper_name="model"):
+    def __init__(self, wrapper_name: str = "model") -> None:
         self.wrapper_name = wrapper_name
 
-    def __call__(self, model):
+    def __call__(
+        self, model: 'base_model.ReportModel'
+    ) -> utils.StringWithAttrs:
         # this part deals with subviews that were already serialized
         cpy = copy.deepcopy(model)
         for key, valstr in model.items():
             if getattr(valstr, '__is_xml__', False):
                 cpy[key] = ET.fromstring(valstr)  # noqa: S314
 
-        def serialize(rootmodel, rootkeyname):
+        def serialize(rootmodel: object, rootkeyname: str) -> ET.Element:
             res = ET.Element(rootkeyname)
 
-            if isinstance(rootmodel, abc.Mapping):
+            if isinstance(rootmodel, Mapping):
                 for key in sorted(rootmodel):
                     res.append(serialize(rootmodel[key], key))
-            elif isinstance(rootmodel, abc.Sequence) and not isinstance(
+            elif isinstance(rootmodel, Sequence) and not isinstance(
                 rootmodel, str
             ):
                 for val in sorted(rootmodel, key=str):
                     res.append(serialize(val, 'item'))
-            elif ET.iselement(rootmodel):
+            elif isinstance(rootmodel, ET.Element):
                 res.append(rootmodel)
             else:
                 res.text = str(rootmodel)

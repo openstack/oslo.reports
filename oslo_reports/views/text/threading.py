@@ -19,7 +19,12 @@ visualizing threads, green threads, and stack traces
 in human-readable form.
 """
 
+from typing import TYPE_CHECKING
+
 from oslo_reports.views import jinja_view as jv
+
+if TYPE_CHECKING:
+    from oslo_reports.models import threading as tm
 
 
 class StackTraceView(jv.JinjaView):
@@ -57,7 +62,7 @@ class GreenThreadView:
 
     FORMAT_STR = "------{thread_str: ^60}------" + "\n" + "{stack_trace}"
 
-    def __call__(self, model):
+    def __call__(self, model: 'tm.GreenThreadModel') -> str:
         return self.FORMAT_STR.format(
             thread_str=" Green Thread ", stack_trace=model.stack_trace
         )
@@ -72,7 +77,7 @@ class ThreadView:
 
     FORMAT_STR = "------{thread_str: ^60}------" + "\n" + "{stack_trace}"
 
-    def __call__(self, model):
+    def __call__(self, model: 'tm.ThreadModel') -> str:
         return self.FORMAT_STR.format(
             thread_str=f" Thread #{model.thread_id} ",
             stack_trace=model.stack_trace,

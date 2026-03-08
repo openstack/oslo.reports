@@ -12,7 +12,7 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-from collections import abc
+from collections.abc import Mapping
 import re
 
 from oslotest import base
@@ -123,7 +123,7 @@ class TestBaseModel(base.BaseTestCase):
         self.assertEqual('0: a;1: b;', str(model))
 
     def test_immutable_mappings_produce_mutable_models(self):
-        class SomeImmutableMapping(abc.Mapping):
+        class SomeImmutableMapping(Mapping[str, int]):
             def __init__(self):
                 self.data = {'a': 2, 'b': 4, 'c': 8}
 

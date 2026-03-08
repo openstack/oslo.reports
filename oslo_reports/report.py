@@ -19,7 +19,15 @@ All reports take the form of a report class containing various report
 sections.
 """
 
+from collections.abc import Callable
+from typing import Any
+
 from oslo_reports.views.text import header as header_views
+
+# A view is either a callable (takes a model, returns str) or a string
+# (used as a plain header). TextReport wraps strings in TitledView, but
+# BasicReport also accepts them for flexibility with the GuruMeditation mixin.
+_View = Callable[[Any], str] | str
 
 
 class BasicReport:
@@ -31,11 +39,19 @@ class BasicReport:
     be serialized by calling :func:`run`.
     """
 
-    def __init__(self):
+    sections: list['ReportSection']
+    _state: int
+
+    def __init__(self) -> None:
         self.sections = []
         self._state = 0
 
-    def add_section(self, view, generator, index=None):
+    def add_section(
+        self,
+        view: _View,
+        generator: Callable[[], Any],
+        index: int | None = None,
+    ) -> None:
         """Add a section to the report
 
         This method adds a section with the given view and
@@ -60,7 +76,7 @@ class BasicReport:
         else:
             self.sections.insert(index, ReportSection(view, generator))
 
-    def run(self):
+    def run(self) -> str:
         """Run the report
 
         This method runs the report, having each section generate
@@ -92,12 +108,20 @@ class ReportSection:
       (any callable object which takes no parameters and returns a data model)
     """
 
-    def __init__(self, view, generator):
+    def __init__(
+        self,
+        view: _View,
+        generator: Callable[[], Any],
+    ) -> None:
         self.view = view
         self.generator = generator
 
-    def __str__(self):
-        return self.view(self.generator())
+    def __str__(self) -> str:
+        model = self.generator()
+        if callable(self.view):
+            return self.view(model)
+        else:
+            return f'{self.view}\n{model}'
 
 
 class ReportOfType(BasicReport):
@@ -120,13 +144,18 @@ class ReportOfType(BasicReport):
     :param str tp: the type of the report
     """
 
-    def __init__(self, tp):
+    def __init__(self, tp: str) -> None:
         self.output_type = tp
         super().__init__()
 
-    def add_section(self, view, generator, index=None):
-        def with_type(gen):
-            def newgen():
+    def add_section(
+        self,
+        view: _View,
+        generator: Callable[[], Any],
+        index: int | None = None,
+    ) -> None:
+        def with_type(gen: Callable[[], Any]) -> Callable[[], Any]:
+            def newgen() -> Any:
                 res = gen()
                 try:
                     res.set_current_view_type(self.output_type)
@@ -149,13 +178,18 @@ class TextReport(ReportOfType):
     :param str name: the title of the report
     """
 
-    def __init__(self, name):
+    def __init__(self, name: str) -> None:
         super().__init__('text')
         self.name = name
         # add a title with a generator that creates an empty result model
         self.add_section(name, lambda: ('|' * 72) + "\n\n")
 
-    def add_section(self, heading, generator, index=None):
+    def add_section(
+        self,
+        heading: _View,
+        generator: Callable[[], Any],
+        index: int | None = None,
+    ) -> None:
         """Add a section to the report
 
         This method adds a section with the given title, and
@@ -180,4 +214,8 @@ class TextReport(ReportOfType):
         :type index: int or None
         """
 
-        super().add_section(header_views.TitledView(heading), generator, index)
+        if isinstance(heading, str):
+            view: _View = header_views.TitledView(heading)
+        else:
+            view = heading
+        super().add_section(view, generator, index)

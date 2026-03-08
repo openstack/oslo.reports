@@ -37,8 +37,8 @@ class ConfigReportGenerator:
     :type cnf: :class:`oslo_config.cfg.ConfigOpts`
     """
 
-    def __init__(self, cnf=cfg.CONF):
+    def __init__(self, cnf: cfg.ConfigOpts = cfg.CONF) -> None:
         self.conf_obj = cnf
 
-    def __call__(self):
+    def __call__(self) -> cm.ConfigModel:
         return cm.ConfigModel(self.conf_obj)

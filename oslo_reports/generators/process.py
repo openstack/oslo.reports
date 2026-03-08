@@ -34,5 +34,5 @@ class ProcessReportGenerator:
     all subprocesses, recursively) using the :class:`psutil.Process` class`.
     """
 
-    def __call__(self):
+    def __call__(self) -> pm.ProcessModel:
         return pm.ProcessModel(psutil.Process(os.getpid()))

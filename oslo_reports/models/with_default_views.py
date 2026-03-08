@@ -12,7 +12,8 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-import copy
+from collections.abc import Callable, Mapping, Sequence
+from typing import Any
 
 from oslo_reports.models import base as base_model
 from oslo_reports.views.json import generic as jsonviews
@@ -50,25 +51,31 @@ class ModelWithDefaultViews(base_model.ReportModel):
        :returns: this model serialized as 'type'
     """
 
-    def __init__(self, *args, **kwargs):
+    views: dict[str, Callable[..., str]]
+
+    def __init__(
+        self,
+        data: Mapping[Any, Any] | Sequence[Any] | None = None,
+        **view_kwargs: Callable[..., str],
+    ) -> None:
         self.views = {
             'text': textviews.KeyValueView(),
             'json': jsonviews.KeyValueView(),
             'xml': xmlviews.KeyValueView(),
         }
 
-        newargs = copy.copy(kwargs)
-        for k in kwargs:
+        for k, v in view_kwargs.items():
             if k.endswith('_view'):
-                self.views[k[:-5]] = kwargs[k]
-                del newargs[k]
-        super().__init__(*args, **newargs)
+                self.views[k[:-5]] = v
+        super().__init__(data)
 
-    def set_current_view_type(self, tp, visited=None):
+    def set_current_view_type(
+        self, tp: str, visited: set[int] | None = None
+    ) -> None:
         self.attached_view = self.views[tp]
         super().set_current_view_type(tp, visited)
 
-    def __getattr__(self, attrname):
+    def __getattr__(self, attrname: str) -> Any:
         if attrname[:3] == 'to_':
             if self.views[attrname[3:]] is not None:
                 return lambda: self.views[attrname[3:]](self)

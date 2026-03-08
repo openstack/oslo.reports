@@ -60,6 +60,7 @@ and get a Guru Meditation Report in the file or terminal
 where stderr is logged for that given service.
 """
 
+from collections.abc import Callable
 import inspect
 import logging
 import os
@@ -69,6 +70,8 @@ import sys
 import threading
 import time
 import traceback
+from types import FrameType
+from typing import Any, ClassVar
 
 from oslo_utils import timeutils
 
@@ -77,6 +80,7 @@ from oslo_reports.generators import process as prgen
 from oslo_reports.generators import threading as tgen
 from oslo_reports.generators import version as pgen
 from oslo_reports import report
+from oslo_reports.report import BasicReport
 
 try:
     import greenlet
@@ -87,7 +91,7 @@ except ImportError:
 LOG = logging.getLogger(__name__)
 
 
-class GuruMeditation:
+class GuruMeditation(BasicReport):
     """A Guru Meditation Report Mixin/Base Class
 
     This class is a base class for Guru Meditation Reports.
@@ -101,9 +105,20 @@ class GuruMeditation:
     MRO is correct.
     """
 
-    timestamp_fmt = "%Y%m%d%H%M%S"
+    timestamp_fmt: ClassVar[str] = "%Y%m%d%H%M%S"
+    persistent_sections: ClassVar[list[tuple[str, Callable[[], Any]]]]
 
-    def __init__(self, version_obj, sig_handler_tb=None, *args, **kwargs):
+    version_obj: Any
+    traceback: FrameType | None
+    start_section_index: int
+
+    def __init__(
+        self,
+        version_obj: Any,
+        sig_handler_tb: FrameType | None = None,
+        *args: Any,
+        **kwargs: Any,
+    ) -> None:
         self.version_obj = version_obj
         self.traceback = sig_handler_tb
 
@@ -111,7 +126,9 @@ class GuruMeditation:
         self.start_section_index = len(self.sections)
 
     @classmethod
-    def register_section(cls, section_title, generator):
+    def register_section(
+        cls, section_title: str, generator: Callable[[], Any]
+    ) -> None:
         """Register a New Section
 
         This method registers a persistent section for the current
@@ -122,20 +139,20 @@ class GuruMeditation:
         """
 
         try:
-            cls.persistent_sections.append([section_title, generator])
+            cls.persistent_sections.append((section_title, generator))
         except AttributeError:
-            cls.persistent_sections = [[section_title, generator]]
+            cls.persistent_sections = [(section_title, generator)]
 
     @classmethod
     def setup_autorun(
         cls,
-        version,
-        service_name=None,
-        log_dir=None,
-        signum=None,
-        conf=None,
-        setup_signal=True,
-    ):
+        version: Any,
+        service_name: str | None = None,
+        log_dir: str | None = None,
+        signum: int | None = None,
+        conf: Any | None = None,
+        setup_signal: bool = True,
+    ) -> None:
         """Set Up Auto-Run
 
         This method sets up the Guru Meditation Report to automatically
@@ -175,8 +192,13 @@ class GuruMeditation:
 
     @classmethod
     def _setup_file_watcher(
-        cls, filepath, interval, version, service_name, log_dir
-    ):
+        cls,
+        filepath: str,
+        interval: int,
+        version: Any,
+        service_name: str | None,
+        log_dir: str | None,
+    ) -> None:
         st = os.stat(filepath)
         if not bool(st.st_mode & stat.S_IRGRP):
             LOG.error(
@@ -185,7 +207,7 @@ class GuruMeditation:
                 filepath,
             )
 
-        def _handler():
+        def _handler() -> None:
             mtime = time.time()
             while True:
                 try:
@@ -207,14 +229,26 @@ class GuruMeditation:
         th.start()
 
     @classmethod
-    def _setup_signal(cls, signum, version, service_name, log_dir):
+    def _setup_signal(
+        cls,
+        signum: int,
+        version: Any,
+        service_name: str | None,
+        log_dir: str | None,
+    ) -> None:
         signal.signal(
             signum,
             lambda sn, f: cls.handle_signal(version, service_name, log_dir, f),
         )
 
     @classmethod
-    def handle_signal(cls, version, service_name, log_dir, frame):
+    def handle_signal(
+        cls,
+        version: Any,
+        service_name: str | None,
+        log_dir: str | None,
+        frame: FrameType | None,
+    ) -> None:
         """The Signal Handler
 
         This method (indirectly) handles receiving a registered signal and
@@ -257,7 +291,7 @@ class GuruMeditation:
             else:
                 print(res, file=sys.stderr)
 
-    def _readd_sections(self):
+    def _readd_sections(self) -> None:
         del self.sections[self.start_section_index :]
 
         self.add_section(
@@ -281,7 +315,7 @@ class GuruMeditation:
         except AttributeError:
             pass
 
-    def run(self):
+    def run(self) -> str:
         self._readd_sections()
         return super().run()
 
@@ -310,5 +344,7 @@ class TextGuruMeditation(GuruMeditation, report.TextReport):
                       traceback for the current thread
     """
 
-    def __init__(self, version_obj, traceback=None):
+    def __init__(
+        self, version_obj: Any, traceback: FrameType | None = None
+    ) -> None:
         super().__init__(version_obj, traceback, 'Guru Meditation')

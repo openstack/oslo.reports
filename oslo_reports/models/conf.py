@@ -18,6 +18,8 @@ This module defines a class representing the data
 model for :mod:`oslo_config` configuration options
 """
 
+from oslo_config import cfg
+
 from oslo_reports.models import with_default_views as mwdv
 from oslo_reports.views.text import generic as generic_text_views
 
@@ -33,16 +35,16 @@ class ConfigModel(mwdv.ModelWithDefaultViews):
     :type conf_obj: :class:`oslo_config.cfg.ConfigOpts`
     """
 
-    def __init__(self, conf_obj):
+    def __init__(self, conf_obj: cfg.ConfigOpts) -> None:
         kv_view = generic_text_views.KeyValueView(
             dict_sep=": ", before_dict=''
         )
         super().__init__(text_view=kv_view)
 
-        def opt_title(optname, co):
-            return co._opts[optname]['opt'].name
+        def opt_title(optname: str, co: cfg.ConfigOpts) -> str:
+            return str(co._opts[optname]['opt'].name)
 
-        def opt_value(opt_obj, value):
+        def opt_value(opt_obj: cfg.ConfigOpts, value: object) -> object:
             if opt_obj['opt'].secret:
                 return '***'
             else:

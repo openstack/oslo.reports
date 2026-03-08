@@ -22,4 +22,5 @@ used in generating reports.
 class StringWithAttrs(str):
     """A String that can have arbitrary attributes"""
 
-    pass
+    __is_json__: bool
+    __is_xml__: bool
