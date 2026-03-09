@@ -5,17 +5,17 @@ build-backend = "pbr.build"
 [project]
 name = "oslo.reports"
 description = "oslo.reports library"
-readme = "README.rst"
 authors = [
     {name = "OpenStack", email = "openstack-discuss@lists.openstack.org"},
 ]
+readme = {file = "README.rst", content-type = "text/x-rst"}
+license = "Apache-2.0"
 requires-python = ">=3.10"
 dynamic = ["version", "dependencies"]
 classifiers = [
     "Environment :: OpenStack",
     "Intended Audience :: Information Technology",
     "Intended Audience :: System Administrators",
-    "License :: OSI Approved :: Apache Software License",
     "Operating System :: POSIX :: Linux",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
@@ -39,8 +39,8 @@ greenlet = [
 [project.entry-points."oslo.config.opts"]
 "oslo.reports" = "oslo_reports.opts:list_opts"
 
-[tool.setuptools]
-packages = ["oslo_reports"]
+[tool.setuptools.packages.find]
+include = ["oslo_reports"]
 
 [tool.bandit]
 exclude_dirs = ["tests"]
