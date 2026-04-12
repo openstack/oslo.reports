@@ -54,7 +54,7 @@ class TestOpenstackGenerators(base.BaseTestCase):
         ):
             model = os_tgen.ThreadReportGenerator("fake traceback")()
             curr_thread = model.get(threading.current_thread().ident, None)  # type: ignore[arg-type]
-            self.assertIsNotNone(curr_thread, None)
+            self.assertIsNotNone(curr_thread)
             self.assertEqual("fake traceback", curr_thread.traceback)
 
     def test_green_thread_generator(self):
