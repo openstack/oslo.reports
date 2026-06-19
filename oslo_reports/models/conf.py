@@ -41,10 +41,10 @@ class ConfigModel(mwdv.ModelWithDefaultViews):
         )
         super().__init__(text_view=kv_view)
 
-        def opt_title(optname: str, co: cfg.ConfigOpts) -> str:
+        def opt_title(optname: str, co: cfg.ConfigOpts | cfg.OptGroup) -> str:
             return str(co._opts[optname]['opt'].name)
 
-        def opt_value(opt_obj: cfg.ConfigOpts, value: object) -> object:
+        def opt_value(opt_obj: cfg._OptInfo, value: object) -> object:
             if opt_obj['opt'].secret:
                 return '***'
             else:
