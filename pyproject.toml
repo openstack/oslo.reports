@@ -41,7 +41,7 @@ greenlet = [
 "oslo.reports" = "oslo_reports.opts:list_opts"
 
 [tool.setuptools.packages.find]
-include = ["oslo_reports"]
+include = ["oslo_reports*"]
 
 [tool.mypy]
 python_version = "3.11"
