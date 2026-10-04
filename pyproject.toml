@@ -44,6 +44,20 @@ greenlet = [
 [tool.setuptools.packages.find]
 include = ["oslo_reports*"]
 
+[tool.coverage.run]
+source = [
+    "oslo_reports"
+]
+branch = true
+parallel = true
+omit = [
+    "oslo_reports/tests/*"
+]
+
+[tool.coverage.report]
+ignore_errors = true
+show_missing = true
+
 [tool.mypy]
 python_version = "3.11"
 show_column_numbers = true
